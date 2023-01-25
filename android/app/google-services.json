@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "266005776476",
+    "project_id": "gastos-foraneo",
+    "storage_bucket": "gastos-foraneo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:266005776476:android:c4438bc2d2a90ec4023e99",
+        "android_client_info": {
+          "package_name": "com.example.gastos_foraneo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "266005776476-fjhchmbqreftfhn3kmuke1ffdfjuic9a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxI_H57SHkJWMvbq0GpZpUR74aXwLSRsY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "266005776476-fjhchmbqreftfhn3kmuke1ffdfjuic9a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

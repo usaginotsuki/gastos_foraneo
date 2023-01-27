@@ -17,15 +17,24 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,41 +52,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyB-Ywbr2pdV-lKzOJeNe-Zd0gAicR4RvVo',
-    appId: '1:266005776476:web:f2f917acad665c66023e99',
-    messagingSenderId: '266005776476',
-    projectId: 'gastos-foraneo',
-    authDomain: 'gastos-foraneo.firebaseapp.com',
-    storageBucket: 'gastos-foraneo.appspot.com',
-    measurementId: 'G-NJVTQKBT1E',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAxI_H57SHkJWMvbq0GpZpUR74aXwLSRsY',
     appId: '1:266005776476:android:c4438bc2d2a90ec4023e99',
     messagingSenderId: '266005776476',
     projectId: 'gastos-foraneo',
     storageBucket: 'gastos-foraneo.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB_Hx6KDB2sKwuFgX4KonASNVQExKNWDHM',
-    appId: '1:266005776476:ios:6223d49865284e87023e99',
-    messagingSenderId: '266005776476',
-    projectId: 'gastos-foraneo',
-    storageBucket: 'gastos-foraneo.appspot.com',
-    iosClientId: '266005776476-74ffubeu4mc91qkdces0ora2b53d1kqo.apps.googleusercontent.com',
-    iosBundleId: 'com.example.gastosForaneo',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyB_Hx6KDB2sKwuFgX4KonASNVQExKNWDHM',
-    appId: '1:266005776476:ios:6223d49865284e87023e99',
-    messagingSenderId: '266005776476',
-    projectId: 'gastos-foraneo',
-    storageBucket: 'gastos-foraneo.appspot.com',
-    iosClientId: '266005776476-74ffubeu4mc91qkdces0ora2b53d1kqo.apps.googleusercontent.com',
-    iosBundleId: 'com.example.gastosForaneo',
   );
 }

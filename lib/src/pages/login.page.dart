@@ -72,7 +72,7 @@ emailSignUp(context) {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   AuthServices auth = AuthServices();
-  
+
   return showDialog(
       context: context,
       builder: (context) {
@@ -214,7 +214,7 @@ emailSignIn(context) {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   dev.log("Validado");
-                  auth.signUpWithEmail(email.text.trim(), password.text.trim());
+                  auth.loginWithEmail(email.text.trim(), password.text.trim());
                 }
                 //Navigator.of(context).pop();
               },

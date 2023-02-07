@@ -5,6 +5,8 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:gastos_foraneo/src/services/auth.services.dart';
 import 'dart:developer' as dev;
 
+import '../Widgets/utils/dialog_ulit.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -137,9 +139,10 @@ emailSignUp(context) {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   dev.log("Validado");
-                  auth.signUpWithEmail(email.text.trim(), password.text.trim());
+                  auth.signUpWithEmail(email.text.trim(), password.text.trim(), context);
+                  
                 }
-                //Navigator.of(context).pop();
+                
               },
               child: const Text('Ok'),
             ),
@@ -216,7 +219,8 @@ emailSignIn(context) {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   dev.log("Validado");
-                  auth.signUpWithEmail(email.text.trim(), password.text.trim());
+                   DialogUtils.showAlertAndSendLoginScreen(context, "Usuario Creado Correctamente");
+                  auth.signUpWithEmail(email.text.trim(), password.text.trim(), context);
                 }
                 //Navigator.of(context).pop();
               },

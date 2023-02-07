@@ -20,47 +20,49 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: const Text('Inicio de sesión'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/gastos.jpg'),
-            const SizedBox(height: 40),
-            SignInButton(Buttons.Google, text: 'Iniciar con Google',
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/gastos.jpg'),
+              const SizedBox(height: 40),
+              SignInButton(Buttons.Google, text: 'Iniciar con Google',
+                  onPressed: () {
+                dev.log("Iniciar con Google");
+                auth.loginWithGoogle();
+              }),
+              const SizedBox(height: 20),
+              SignInButton(
+                Buttons.Facebook,
+                text: 'Iniciar con Facebook',
+                onPressed: () {},
+              ),
+              const SizedBox(height: 20),
+              SignInButton(
+                Buttons.Email,
+                text: 'Crear cuenta con correo',
                 onPressed: () {
-              dev.log("Iniciar con Google");
-              auth.loginWithGoogle();
-            }),
-            const SizedBox(height: 20),
-            SignInButton(
-              Buttons.Facebook,
-              text: 'Iniciar con Facebook',
-              onPressed: () {},
-            ),
-            const SizedBox(height: 20),
-            SignInButton(
-              Buttons.Email,
-              text: 'Crear cuenta con correo',
-              onPressed: () {
-                emailSignUp(context);
-              },
-            ),
-            SignInButton(
-              Buttons.Email,
-              text: 'Iniciar con correo',
-              onPressed: () {
-                emailSignIn(context);
-              },
-            ),
-            const SizedBox(height: 20),
-            SignInButton(
-              Buttons.Google,
-              text: 'Salir de Google',
-              onPressed: () {
-                auth.logoutGoogle();
-              },
-            ),
-          ],
+                  emailSignUp(context);
+                },
+              ),
+              SignInButton(
+                Buttons.Email,
+                text: 'Iniciar con correo',
+                onPressed: () {
+                  emailSignIn(context);
+                },
+              ),
+              const SizedBox(height: 20),
+              SignInButton(
+                Buttons.Google,
+                text: 'Salir de Google',
+                onPressed: () {
+                  auth.logoutGoogle();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

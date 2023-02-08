@@ -5,7 +5,6 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:gastos_foraneo/src/services/auth.services.dart';
 import 'dart:developer' as dev;
 
-import '../Widgets/utils/dialog_ulit.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -36,12 +35,6 @@ class _LoginPageState extends State<LoginPage> {
               }),
               const SizedBox(height: 20),
               SignInButton(
-                Buttons.Facebook,
-                text: 'Iniciar con Facebook',
-                onPressed: () {},
-              ),
-              const SizedBox(height: 20),
-              SignInButton(
                 Buttons.Email,
                 text: 'Crear cuenta con correo',
                 onPressed: () {
@@ -55,14 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                   emailSignIn(context);
                 },
               ),
-              const SizedBox(height: 20),
-              SignInButton(
-                Buttons.Google,
-                text: 'Salir de Google',
-                onPressed: () {
-                  auth.logoutGoogle();
-                },
-              ),
+             
             ],
           ),
         ),
@@ -72,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
 }
 
 emailSignUp(context) {
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   AuthServices auth = AuthServices();
@@ -82,14 +68,14 @@ emailSignUp(context) {
       builder: (context) {
         return AlertDialog(
           title: const Text(
-            'Email',
+            'Registro',
             textAlign: TextAlign.center,
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Column(
                     children: [
                       const Text('Ingresa tu correo y contraseña'),
@@ -137,7 +123,7 @@ emailSignUp(context) {
             ),
             TextButton(
               onPressed: () {
-                if (_formKey.currentState!.validate()) {
+                if (formKey.currentState!.validate()) {
                   dev.log("Validado");
                   auth.signUpWithEmail(email.text.trim(), password.text.trim(), context);
                   
@@ -152,7 +138,7 @@ emailSignUp(context) {
 }
 
 emailSignIn(context) {
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
@@ -162,14 +148,14 @@ emailSignIn(context) {
       builder: (context) {
         return AlertDialog(
           title: const Text(
-            'Email',
+            'Login',
             textAlign: TextAlign.center,
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Column(
                     children: [
                       const Text('Ingresa tu correo y contraseña'),
@@ -217,12 +203,10 @@ emailSignIn(context) {
             ),
             TextButton(
               onPressed: () {
-                if (_formKey.currentState!.validate()) {
+                if (formKey.currentState!.validate()) {
                   dev.log("Validado");
-                   DialogUtils.showAlertAndSendLoginScreen(context, "Usuario Creado Correctamente");
-                  auth.signUpWithEmail(email.text.trim(), password.text.trim(), context);
+                  auth.loginWithEmail(email.text.trim(), password.text.trim(), context);
                 }
-                //Navigator.of(context).pop();
               },
               child: const Text('Ok'),
             ),

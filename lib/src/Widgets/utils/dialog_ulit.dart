@@ -1,8 +1,9 @@
 
 import 'package:flutter/material.dart';
 
+import '../../pages/home_page.dart';
 import '../../pages/login.page.dart';
-import '../custom/progres_hud.dart';
+import '../Custom/progres_hud.dart';
 
 
 
@@ -43,6 +44,32 @@ class DialogUtils {
                Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (context) => const LoginPage(
+                   
+                  )),
+          (route) => false);
+            },
+            child: const Text('Aceptar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+   static void showAlertAndSendHomeScreen(
+    BuildContext context,
+    String message,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('FinanceMobile'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+               Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => const HomePage(
                    
                   )),
           (route) => false);

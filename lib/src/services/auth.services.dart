@@ -5,6 +5,7 @@ import 'dart:developer' as dev;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../Widgets/utils/dialog_ulit.dart';
+import '../models/user_expenses_model.dart';
 import '../models/user_model.dart';
 
 class AuthServices {
@@ -13,16 +14,14 @@ class AuthServices {
 
   signUpWithEmail(String email, String password, BuildContext context) async {
     try {
-
       dev.log(email.toString());
       dev.log(password.toString());
       var credential = await auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) {
-
-          DialogUtils.showAlertAndSendLoginScreen(
-              context, "Usuario creado correctamente");
-        
+        userSetup(email, value.user!.uid);
+        DialogUtils.showAlertAndSendLoginScreen(
+            context, "Usuario creado correctamente");
       });
     } catch (e) {
       DialogUtils.showAlertAndSendLoginScreen(
@@ -33,14 +32,11 @@ class AuthServices {
 
   loginWithEmail(String email, String password, BuildContext context) async {
     try {
-    
       await auth
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) {
-      
-          DialogUtils.showAlertAndSendHomeScreen(
-              context, "Ha ingresado exitosamente");
-        
+        DialogUtils.showAlertAndSendHomeScreen(
+            context, "Ha ingresado exitosamente");
       });
     } catch (e) {
       DialogUtils.showAlertAndSendLoginScreen(
@@ -64,22 +60,35 @@ class AuthServices {
   logoutGoogle() async {
     await _googleSignIn.signOut();
   }
-
-  Future<void> userSetup(String displayName) async {
-   //firebase auth instance to get uuid of user
-   FirebaseAuth auth = FirebaseAuth.instance.currentUser! as FirebaseAuth;
-    Usuario usr = Usuario(correo: "",id: "",name: "",phone: ""); 
-   //now below I am getting an instance of firebaseiestore then getting the user collection
-   //now I am creating the document if not already exist and setting the data.
-   FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).set({
-    'a': usr.correo,
-    'a': auth.currentUser!.uid,
-    'a': usr.name,
-    'a': usr.phone,
-   }
-    
-   );
-
-   return;
-}
+//Crud para la creacion de usuario
+  Future<void> userSetup(String email, String uid) async {
+    Usuario usr = Usuario(correo: email, id: "", name: "", phone: "");
+    UsuarioGastos usrgst = UsuarioGastos(
+        cleaningAmount: 0,
+        foodAmount: 0,
+        studyAmount: 0,
+        totalAmount: 0,
+        transportAmount: 0,
+        variousAmount: 0);
+    FirebaseFirestore.instance.collection('usuarios').doc(uid).set({
+      'user_email': usr.correo,
+      'user_id': uid,
+      'user_name': usr.name,
+      'user_phone': usr.phone,
+    });
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .collection("expenses")
+        .doc("exp$uid")
+        .set({
+      "user_cleaningAmount": usrgst.cleaningAmount,
+      "user_foodAmount": usrgst.foodAmount,
+      "user_studyAmount": usrgst.studyAmount,
+      "user_totalAmount": usrgst.totalAmount,
+      "user_transportAmount": usrgst.transportAmount,
+      "user_variousAmount": usrgst.variousAmount
+    });
+    return;
+  }
 }

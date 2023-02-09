@@ -5,7 +5,6 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:gastos_foraneo/src/services/auth.services.dart';
 import 'dart:developer' as dev;
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -26,29 +25,106 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/gastos.jpg'),
-              const SizedBox(height: 40),
-              SignInButton(Buttons.Google, text: 'Iniciar con Google',
-                  onPressed: () {
-                dev.log("Iniciar con Google");
-                auth.loginWithGoogle();
-              }),
-              const SizedBox(height: 20),
-              SignInButton(
-                Buttons.Email,
-                text: 'Crear cuenta con correo',
-                onPressed: () {
-                  emailSignUp(context);
-                },
+              const Padding(padding: EdgeInsets.only(top: 20.0)),
+              Image.asset('assets/presupuesto7.png'),
+              const Padding(padding: EdgeInsets.only(top: 16.0)),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.06,
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).dividerColor,
+                      borderRadius: BorderRadius.circular(64.0),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                          offset: const Offset(13.0, 13.0),
+                          color: const Color.fromARGB(255, 56, 89, 122)
+                              .withOpacity(0.3),
+                          spreadRadius: 3.0,
+                          blurRadius: 20.0,
+                        ),
+                        const BoxShadow(
+                          offset: Offset(-12.0, -12.0),
+                          color: Colors.white,
+                          spreadRadius: 3.0,
+                          blurRadius: 20.0,
+                        ),
+                      ]),
+                  child: SignInButton(
+                    Buttons.Google,
+                    text: 'Iniciar con Google',
+                    onPressed: () {
+                      dev.log("Iniciar con Google");
+                      auth.loginWithGoogle();
+                    },
+                  ),
+                ),
               ),
-              SignInButton(
-                Buttons.Email,
-                text: 'Iniciar con correo',
-                onPressed: () {
-                  emailSignIn(context);
-                },
+              const Padding(padding: EdgeInsets.only(top: 20.0)),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.06,
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).dividerColor,
+                      borderRadius: BorderRadius.circular(64.0),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                          offset: const Offset(13.0, 13.0),
+                          color: const Color.fromARGB(255, 56, 89, 122)
+                              .withOpacity(0.3),
+                          spreadRadius: 3.0,
+                          blurRadius: 20.0,
+                        ),
+                        const BoxShadow(
+                          offset: Offset(-12.0, -12.0),
+                          color: Colors.white,
+                          spreadRadius: 3.0,
+                          blurRadius: 20.0,
+                        ),
+                      ]),
+                  child: SignInButton(
+                    Buttons.Email,
+                    text: 'Crear cuenta con correo',
+                    onPressed: () {
+                      emailSignUp(context);
+                    },
+                  ),
+                ),
               ),
-             
+              const Padding(padding: EdgeInsets.only(top: 20.0)),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.06,
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).dividerColor,
+                    borderRadius: BorderRadius.circular(64.0),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        offset: const Offset(13.0, 13.0),
+                        color: const Color.fromARGB(255, 56, 89, 122)
+                            .withOpacity(0.3),
+                        spreadRadius: 3.0,
+                        blurRadius: 20.0,
+                      ),
+                      const BoxShadow(
+                        offset: Offset(-12.0, -12.0),
+                        color: Colors.white,
+                        spreadRadius: 3.0,
+                        blurRadius: 20.0,
+                      ),
+                    ],
+                  ),
+                  child: SignInButton(
+                    Buttons.Email,
+                    text: 'Iniciar con correo',
+                    onPressed: () {
+                      emailSignIn(context);
+                    },
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -62,7 +138,7 @@ emailSignUp(context) {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   AuthServices auth = AuthServices();
-  
+
   return showDialog(
       context: context,
       builder: (context) {
@@ -125,10 +201,9 @@ emailSignUp(context) {
               onPressed: () {
                 if (formKey.currentState!.validate()) {
                   dev.log("Validado");
-                  auth.signUpWithEmail(email.text.trim(), password.text.trim(), context);
-                  
+                  auth.signUpWithEmail(
+                      email.text.trim(), password.text.trim(), context);
                 }
-                
               },
               child: const Text('Ok'),
             ),
@@ -205,7 +280,8 @@ emailSignIn(context) {
               onPressed: () {
                 if (formKey.currentState!.validate()) {
                   dev.log("Validado");
-                  auth.loginWithEmail(email.text.trim(), password.text.trim(), context);
+                  auth.loginWithEmail(
+                      email.text.trim(), password.text.trim(), context);
                 }
               },
               child: const Text('Ok'),
@@ -213,4 +289,39 @@ emailSignIn(context) {
           ],
         );
       });
+}
+
+class NeumorphicButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 300.0,
+      height: 300.0,
+      decoration: BoxDecoration(
+        color: Color(0xFFE6EFFD),
+        borderRadius: BorderRadius.circular(64.0),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            offset: Offset(12.0, 12.0),
+            color: Color(0xFFA2B4C6).withOpacity(0.3),
+            spreadRadius: 3.0,
+            blurRadius: 20.0,
+          ),
+          BoxShadow(
+            offset: Offset(-12.0, -12.0),
+            color: Colors.white,
+            spreadRadius: 3.0,
+            blurRadius: 20.0,
+          ),
+        ],
+      ),
+      child: Center(
+        child: Icon(
+          Icons.favorite_border,
+          color: Colors.red[400],
+          size: 150.0,
+        ),
+      ),
+    );
+  }
 }

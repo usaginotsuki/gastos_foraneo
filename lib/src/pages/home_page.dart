@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../Widgets/BottomMenu/bottom_menu_widget.dart';
 
-
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -17,6 +15,7 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,9 +23,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Pagina Principal"),
       ),
       body: SingleChildScrollView(
-        child: Column(children:  const [
-          Text("BIENVENIDOS")
-        ]),
+        child: Column(children: const [Text("BIENVENIDOS")]),
       ),
       bottomNavigationBar: const BottomMenuWidget(selectedIndex: 1),
     );

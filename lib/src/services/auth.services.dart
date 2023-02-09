@@ -92,6 +92,7 @@ class AuthServices {
     UsuarioGastos usrgst = UsuarioGastos(
         cleaningAmount: 0,
         foodAmount: 0,
+        idexp: "exp"+uid,
         studyAmount: 0,
         totalAmount: 0,
         transportAmount: 0,
@@ -110,6 +111,7 @@ class AuthServices {
         .set({
       "user_cleaningAmount": usrgst.cleaningAmount,
       "user_foodAmount": usrgst.foodAmount,
+      "user_idexp": "exp"+uid,
       "user_studyAmount": usrgst.studyAmount,
       "user_totalAmount": usrgst.totalAmount,
       "user_transportAmount": usrgst.transportAmount,

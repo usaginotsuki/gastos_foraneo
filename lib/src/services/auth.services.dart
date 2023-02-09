@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:developer' as dev;
-
+import 'package:provider/provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../Providers/main_provider.dart';
 import '../Widgets/utils/dialog_ulit.dart';
 import '../models/user_expenses_model.dart';
 import '../models/user_model.dart';
@@ -31,10 +32,12 @@ class AuthServices {
   }
 
   loginWithEmail(String email, String password, BuildContext context) async {
+    final mainProvider = Provider.of<MainProvider>(context, listen: false);
     try {
       await auth
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) {
+                   mainProvider.token = value.user!.uid;
         DialogUtils.showAlertAndSendHomeScreen(
             context, "Ha ingresado exitosamente");
       });

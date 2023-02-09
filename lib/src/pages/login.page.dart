@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:gastos_foraneo/src/services/auth.services.dart';
+import '../../Core/Colors/Hex_Color.dart';
 import 'dart:developer' as dev;
 
 class LoginPage extends StatefulWidget {
@@ -13,26 +14,51 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //personalizacion colores
+  Color backgroundColor = const Color(0xFF1F1A30);
+  Color enabled = const Color.fromARGB(255, 63, 56, 89);
+  Color enabledtxt = Colors.white;
+  Color deaible = Colors.grey;
+  //
   AuthServices auth = AuthServices();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Inicio de sesión'),
-      ),
       body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Padding(padding: EdgeInsets.only(top: 20.0)),
-              Image.asset('assets/presupuesto7.png'),
-              const Padding(padding: EdgeInsets.only(top: 16.0)),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.06,
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: Container(
-                  decoration: BoxDecoration(
+        child: Container(
+          height: MediaQuery.of(context).size.height.round() * 1,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                stops: const [0.1, 0.4, 0.7, 0.9],
+                colors: [
+                  HexColor("#4b4293").withOpacity(0.8),
+                  HexColor("#4b4293"),
+                  HexColor("#08418e"),
+                  HexColor("#08418e")
+                ],
+              ),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                    HexColor("#fff").withOpacity(0.2), BlendMode.dstATop),
+                image: const NetworkImage(
+                  'https://cdna.artstation.com/p/assets/images/images/034/757/492/large/jorge-hardt-02112021-minimalist-japanese-mobile-hd.jpg?1613135473',
+                ),
+              )),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Padding(padding: EdgeInsets.only(top: 110.0)),
+                Image.asset('assets/presupuesto11.png'),
+                const Padding(padding: EdgeInsets.only(top: 40.0)),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.06,
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: Container(
+                    decoration: BoxDecoration(
                       color: Theme.of(context).dividerColor,
                       borderRadius: BorderRadius.circular(64.0),
                       boxShadow: <BoxShadow>[
@@ -45,27 +71,61 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const BoxShadow(
                           offset: Offset(-12.0, -12.0),
-                          color: Colors.white,
+                          color: Color.fromARGB(255, 122, 126, 205),
                           spreadRadius: 3.0,
                           blurRadius: 20.0,
                         ),
-                      ]),
-                  child: SignInButton(
-                    Buttons.Google,
-                    text: 'Iniciar con Google',
-                    onPressed: () {
-                      dev.log("Iniciar con Google");
-                      auth.loginWithGoogle();
-                    },
+                      ],
+                    ),
+                    child: SignInButton(
+                      Buttons.Google,
+                      elevation: 2.0,
+                      text: 'Iniciar con Google',
+                      onPressed: () {
+                        dev.log("Iniciar con Google");
+                        auth.loginWithGoogle();
+                      },
+                    ),
                   ),
                 ),
-              ),
-              const Padding(padding: EdgeInsets.only(top: 20.0)),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.06,
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: Container(
-                  decoration: BoxDecoration(
+                const Padding(padding: EdgeInsets.only(top: 20.0)),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.06,
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).dividerColor,
+                        borderRadius: BorderRadius.circular(64.0),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            offset: const Offset(13.0, 13.0),
+                            color: const Color.fromARGB(255, 56, 89, 122)
+                                .withOpacity(0.3),
+                            spreadRadius: 3.0,
+                            blurRadius: 20.0,
+                          ),
+                          const BoxShadow(
+                            offset: Offset(-12.0, -12.0),
+                            color: Color.fromARGB(255, 122, 126, 205),
+                            spreadRadius: 3.0,
+                            blurRadius: 20.0,
+                          ),
+                        ]),
+                    child: SignInButton(
+                      Buttons.Email,
+                      text: 'Crear cuenta con correo',
+                      onPressed: () {
+                        emailSignUp(context);
+                      },
+                    ),
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 20.0)),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.06,
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: Container(
+                    decoration: BoxDecoration(
                       color: Theme.of(context).dividerColor,
                       borderRadius: BorderRadius.circular(64.0),
                       boxShadow: <BoxShadow>[
@@ -78,54 +138,23 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const BoxShadow(
                           offset: Offset(-12.0, -12.0),
-                          color: Colors.white,
+                          color: Color.fromARGB(255, 122, 126, 205),
                           spreadRadius: 3.0,
                           blurRadius: 20.0,
                         ),
-                      ]),
-                  child: SignInButton(
-                    Buttons.Email,
-                    text: 'Crear cuenta con correo',
-                    onPressed: () {
-                      emailSignUp(context);
-                    },
+                      ],
+                    ),
+                    child: SignInButton(
+                      Buttons.Email,
+                      text: 'Iniciar con correo',
+                      onPressed: () {
+                        emailSignIn(context);
+                      },
+                    ),
                   ),
                 ),
-              ),
-              const Padding(padding: EdgeInsets.only(top: 20.0)),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.06,
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).dividerColor,
-                    borderRadius: BorderRadius.circular(64.0),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        offset: const Offset(13.0, 13.0),
-                        color: const Color.fromARGB(255, 56, 89, 122)
-                            .withOpacity(0.3),
-                        spreadRadius: 3.0,
-                        blurRadius: 20.0,
-                      ),
-                      const BoxShadow(
-                        offset: Offset(-12.0, -12.0),
-                        color: Colors.white,
-                        spreadRadius: 3.0,
-                        blurRadius: 20.0,
-                      ),
-                    ],
-                  ),
-                  child: SignInButton(
-                    Buttons.Email,
-                    text: 'Iniciar con correo',
-                    onPressed: () {
-                      emailSignIn(context);
-                    },
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

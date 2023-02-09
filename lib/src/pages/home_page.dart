@@ -55,7 +55,12 @@ class _HomePageState extends State<HomePage> {
                   var usrss =
                       Usuario.fromJson(usuario.data() as Map<String, dynamic>);
 
-                  return Text(usrss.correo);
+                  return Center(child: Column(
+                    children: [
+                      Text(usrss.correo),
+                      Text(usrss.id,)
+                    ],
+                  ));
                 }).toList());
               })),
       bottomNavigationBar: const BottomMenuWidget(selectedIndex: 1),

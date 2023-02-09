@@ -62,7 +62,7 @@ emailSignUp(context) {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   AuthServices auth = AuthServices();
-  
+
   return showDialog(
       context: context,
       builder: (context) {

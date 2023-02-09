@@ -11,7 +11,12 @@ import '../models/user_model.dart';
 
 class AuthServices {
   FirebaseAuth auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+      //'https://www.googleapis.com/auth/contacts.readonly',
+    ],
+  );
 
   signUpWithEmail(String email, String password, BuildContext context) async {
     try {
@@ -49,14 +54,32 @@ class AuthServices {
   }
 
   loginWithGoogle() async {
-    GoogleSignInAccount? auth = await _googleSignIn.signIn();
-    GoogleSignInAuthentication googleAuth =
-        await _googleSignIn.currentUser!.authentication;
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
-    try {
-      dev.log(auth.toString());
-    } catch (e) {
-      dev.log(e.toString());
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      try {
+        final UserCredential userCredential =
+            await auth.signInWithCredential(credential);
+
+        dev.log(userCredential.toString());
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'account-exists-with-different-credential') {
+          // handle the error here
+        } else if (e.code == 'invalid-credential') {
+          // handle the error here
+        }
+      } catch (e) {
+        // handle the error here
+      }
     }
   }
 

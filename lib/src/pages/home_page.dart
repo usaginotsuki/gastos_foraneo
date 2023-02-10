@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gastos_foraneo/src/Providers/main_provider.dart';
 import 'package:gastos_foraneo/src/models/user_expenses_model.dart';
 import 'package:provider/provider.dart';
 
 import '../Widgets/BottomMenu/bottom_menu_widget.dart';
+import '../Widgets/utils/dialog_ulit.dart';
 import '../models/user_model.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,8 +17,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  TextEditingController controllerTextLimp = TextEditingController();
+  TextEditingController controllerTextComi = TextEditingController();
+  TextEditingController controllerTextEstu = TextEditingController();
+  TextEditingController controllerTextTota = TextEditingController();
+  TextEditingController controllerTextTrasn = TextEditingController();
+  TextEditingController controllerTextVario = TextEditingController();
+
   PageController _controller = PageController();
   int currentPage = DateTime.now().month - 1;
+  String tipodepago = "";
   FirebaseFirestore dataUserFuture = FirebaseFirestore.instance;
   Usuario usr = Usuario(correo: "", id: "", name: "", phone: "");
   UsuarioGastos usrgst = UsuarioGastos(
@@ -34,14 +44,60 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    
     final mainProvider = Provider.of<MainProvider>(context, listen: false);
-    
-
     CollectionReference clientegastos = FirebaseFirestore.instance
         .collection('usuarios')
         .doc(mainProvider.token)
         .collection("expenses");
+    _editParamGastos(String type, String newValue) {
+      final mainProvider = Provider.of<MainProvider>(context, listen: false);
+      clientegastos.doc("exp" + mainProvider.token).update((type == "limpieza")
+          ? {
+              'user_cleaningAmount': num.parse(newValue),
+            }
+          : (type == "comida")
+              ? {
+                  'user_foodAmount': num.parse(newValue),
+                }
+              : (type == "estudio")
+                  ? {
+                      'user_studyAmount': num.parse(newValue),
+                    }
+                  : (type == "estudio")
+                      ? {
+                          'user_transportAmount': num.parse(newValue),
+                        }
+                      : (type == "transporte")
+                          ? {
+                              'user_variousAmount': num.parse(newValue),
+                            }
+                          : (type == "varios")
+                              ? {
+                                 'user_variousAmount': num.parse(newValue),
+                              }
+                              : {
+                                  "user_totalAmount": num.parse(newValue),
+                                });
+    }
+
+    _alertDialog(String type, TextEditingController controller) {
+      DialogUtils.showAlertWithCustomActions(context, "", [
+        TextFormField(
+          decoration: InputDecoration(labelText: "Escriba el nuevo $type"),
+          controller: controller,
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.allow(RegExp(r'^[1-9][\.\d]*(,\d+)?$')),
+          ],
+          onFieldSubmitted: (newValue) {
+            setState(() {
+              _editParamGastos(type, newValue);
+              Navigator.pop(context, 'OK');
+            });
+          },
+        )
+      ]);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -88,6 +144,10 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Card(
                                   child: ListTile(
+                                    onTap: () {
+                                      tipodepago = "limpieza";
+                                      _alertDialog(tipodepago, controllerTextLimp);
+                                    },
                                     leading: Icon(Icons.wash),
                                     title: const Text("Limpieza"),
                                     trailing: Text(
@@ -99,6 +159,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Card(
                                   child: ListTile(
+                                    onTap: () {
+                                      tipodepago = "comida";
+                                      _alertDialog(tipodepago, controllerTextComi);
+                                    },
                                     leading: Icon(Icons.food_bank),
                                     title: const Text("Comida"),
                                     trailing: Text(gasto.foodAmount.toString(),
@@ -109,6 +173,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Card(
                                   child: ListTile(
+                                     onTap: () {
+                                      tipodepago = "estudios";
+                                      _alertDialog(tipodepago, controllerTextComi);
+                                    },
                                     leading: Icon(Icons.book),
                                     title: const Text("Estudios"),
                                     trailing: Text(gasto.studyAmount.toString(),
@@ -119,6 +187,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Card(
                                   child: ListTile(
+                                      onTap: () {
+                                      tipodepago = "transporte";
+                                      _alertDialog(tipodepago, controllerTextComi);
+                                    },
                                     leading: Icon(Icons.bus_alert),
                                     title: const Text("Transporte"),
                                     trailing: Text(
@@ -130,6 +202,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Card(
                                   child: ListTile(
+                                      onTap: () {
+                                      tipodepago = "varios";
+                                      _alertDialog(tipodepago, controllerTextComi);
+                                    },
                                     leading: Icon(Icons.festival),
                                     title: const Text("Varios"),
                                     trailing: Text(
@@ -145,7 +221,10 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                       OutlinedButton(
-                          onPressed: () {}, child: Text("Agregar Fondos"))
+                          onPressed: () {
+                               tipodepago = "fondos";
+                                      _alertDialog(tipodepago, controllerTextTota);
+                          }, child: Text("Agregar Fondos"))
                     ],
                   );
                 }).toList());

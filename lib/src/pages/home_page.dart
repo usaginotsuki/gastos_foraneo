@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   PageController _controller = PageController();
   int currentPage = DateTime.now().month - 1;
   String tipodepago = "";
+  String yeardata = "0";
   FirebaseFirestore dataUserFuture = FirebaseFirestore.instance;
   Usuario usr = Usuario(correo: "", id: "", name: "", phone: "");
   UsuarioGastos usrgst = UsuarioGastos(
@@ -63,11 +64,11 @@ class _HomePageState extends State<HomePage> {
                   ? {
                       'user_studyAmount': num.parse(newValue),
                     }
-                  : (type == "estudio")
+                  : (type == "transporte")
                       ? {
                           'user_transportAmount': num.parse(newValue),
                         }
-                      : (type == "transporte")
+                      : (type == "varios")
                           ? {
                               'user_variousAmount': num.parse(newValue),
                             }
@@ -76,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                                  'user_variousAmount': num.parse(newValue),
                               }
                               : {
-                                  "user_totalAmount": num.parse(newValue),
+                                 
                                 });
     }
 
@@ -224,7 +225,11 @@ class _HomePageState extends State<HomePage> {
                           onPressed: () {
                                tipodepago = "fondos";
                                       _alertDialog(tipodepago, controllerTextTota);
-                          }, child: Text("Agregar Fondos"))
+                          }, child: Text("Agregar Fondos")),
+                           OutlinedButton(
+                          onPressed: () {
+                            _alertDialog(tipodepago, controllerTextTota);
+                          }, child: Text("Enviar el Reporte")),
                     ],
                   );
                 }).toList());
@@ -237,7 +242,9 @@ class _HomePageState extends State<HomePage> {
     return SizedBox.fromSize(
       size: Size.fromHeight(70.0),
       child: PageView(
-        onPageChanged: (newPage) {},
+        onPageChanged: (newPage) {
+          yeardata = newPage.toString();
+        },
         controller: _controller,
         children: <Widget>[
           _pageItem("Enero", 0),

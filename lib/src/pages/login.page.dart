@@ -251,9 +251,10 @@ emailSignIn(context) {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text(
+          title:  Text(
             'Login',
             textAlign: TextAlign.center,
+            style: TextStyle(color: Theme.of(context).primaryColor),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,

@@ -119,4 +119,30 @@ class AuthServices {
     });
     return;
   }
+
+    Future<void> userNonthReport(String email, String uid) async {
+    UsuarioGastos usrgst = UsuarioGastos(
+        cleaningAmount: 0,
+        foodAmount: 0,
+        idexp: "exp"+uid,
+        studyAmount: 0,
+        totalAmount: 0,
+        transportAmount: 0,
+        variousAmount: 0);
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .collection("expenses")
+        .doc("exp$uid")
+        .set({
+      "user_cleaningAmount": usrgst.cleaningAmount,
+      "user_foodAmount": usrgst.foodAmount,
+      "user_idexp": "exp"+uid,
+      "user_studyAmount": usrgst.studyAmount,
+      "user_totalAmount": usrgst.totalAmount,
+      "user_transportAmount": usrgst.transportAmount,
+      "user_variousAmount": usrgst.variousAmount
+    });
+    return;
+  }
 }

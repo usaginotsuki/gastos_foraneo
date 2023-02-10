@@ -153,6 +153,44 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SizedBox(
+                      height: 45,
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.resolveWith<Color?>(
+                                (Set<MaterialState> states) {
+                                  if (states.contains(MaterialState.pressed)) {
+                                    return Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withOpacity(0.5);
+                                  }
+                                  return null; // Use the component's default.
+                                },
+                              ),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(
+                                        color: const Color.fromARGB(
+                                            255, 56, 89, 122),
+                                      )))),
+                          //Agregas la funcion
+                          onPressed: () {
+                            emailSignUp(context);
+                          },
+                          icon: const Icon(Icons.login),
+                          label: const Text("Ingresar")),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

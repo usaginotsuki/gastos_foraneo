@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:gastos_foraneo/src/pages/home_page.dart';
 import 'package:gastos_foraneo/src/pages/information_page.dart';
@@ -29,7 +28,7 @@ class _BottomMenuWidgetState extends State<BottomMenuWidget> {
       backgroundColor: Colors.white,
       onButtonPressed: onButtonPressed,
       iconSize: 30,
-      activeColor: const Color(0xFF01579B),
+      activeColor: Theme.of(context).primaryColor,
       selectedIndex: indexSelected,
       barItems: [
         BarItem(

@@ -86,9 +86,9 @@ class DialogUtils {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-          title: const Text('Mobile POS'),
-          content: Text(message),
-          actions: actions),
+          title: const Text('FinanceMobile'),
+          content: actions.first,
+        ),
     );
   }
 

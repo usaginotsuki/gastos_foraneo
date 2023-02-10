@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gastos_foraneo/src/Providers/main_provider.dart';
 import 'package:gastos_foraneo/src/models/user_model.dart';
 import 'package:provider/provider.dart';
-
+import '../Widgets/utils/dialog_ulit.dart';
 import '../Widgets/BottomMenu/bottom_menu_widget.dart';
 
 class SettingPage extends StatefulWidget {
@@ -16,7 +16,10 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   CollectionReference cliente =
       FirebaseFirestore.instance.collection('usuarios');
-
+  String type = "";
+  TextEditingController controllerTextName = TextEditingController();
+  TextEditingController controllerTextEmail = TextEditingController();
+  TextEditingController controllerTextPhone = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final mainProvider = Provider.of<MainProvider>(context, listen: false);
@@ -43,30 +46,44 @@ class _SettingPageState extends State<SettingPage> {
                       child: Column(
                     children: [
                       ListTile(
-                          leading: Icon(Icons.email),
-                          title: Text(
-                            usuario.correo,
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          ),
-                          trailing: IconButton(onPressed: () {}, icon: Icon(Icons.edit_outlined)),
-                          ),
-                        
+                        leading: Icon(Icons.email),
+                        title: Text(
+                          usuario.correo,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        trailing: IconButton(
+                            onPressed: () {
+                              type = "email";
+                              _alertDialog(type, controllerTextEmail);
+                            },
+                            icon: Icon(Icons.edit_outlined)),
+                      ),
                       ListTile(
-                          leading: Icon(Icons.person),
-                          title: Text(
-                            usuario.name,
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          ),
-                           trailing: IconButton(onPressed: () {}, icon: Icon(Icons.edit_outlined)),
-                          ),
-                          ListTile(
-                          leading: Icon(Icons.phone),
-                          title: Text(
-                            usuario.phone,
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          ),
-                           trailing: IconButton(onPressed: () {}, icon: Icon(Icons.edit_outlined)),
-                          ),
+                        leading: Icon(Icons.person),
+                        title: Text(
+                          usuario.name,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        trailing: IconButton(
+                            onPressed: () {
+                              type = "nombre";
+                              _alertDialog(type, controllerTextName);
+                            },
+                            icon: Icon(Icons.edit_outlined)),
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.phone),
+                        title: Text(
+                          usuario.phone,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        trailing: IconButton(
+                            onPressed: () {
+                              type = "celular";
+                              _alertDialog(type, controllerTextPhone);
+                            },
+                            icon: Icon(Icons.edit_outlined)),
+                      ),
                     ],
                   )),
                 );
@@ -76,10 +93,43 @@ class _SettingPageState extends State<SettingPage> {
       bottomNavigationBar: const BottomMenuWidget(selectedIndex: 0),
     );
   }
-  _editParam(String type){
 
+  _editParamUsr(String type, String newValue) {
+    final mainProvider = Provider.of<MainProvider>(context, listen: false);
+    cliente.doc(mainProvider.token).update((type == "email")
+        ? {
+            'user_email': newValue,
+          }
+        : (type == "nombre")
+            ? {
+                'user_name': newValue,
+              }
+            : (type == "celular")
+                ? {
+                    'user_phone': "+593 " + newValue,
+                  }
+                : {});
+  }
 
-    
-
+  _alertDialog(String type, TextEditingController controller) {
+    DialogUtils.showAlertWithCustomActions(context, "", [
+      TextFormField(
+        decoration: InputDecoration(labelText: "Escriba el nuevo $type"),
+        controller: controller,
+        keyboardType: (type == "email")
+            ? TextInputType.emailAddress
+            : (type == "nombre")
+                ? TextInputType.name
+                : (type == "celular")
+                    ? TextInputType.phone
+                    : TextInputType.none,
+        onFieldSubmitted: (newValue) {
+          setState(() {
+            _editParamUsr(type, newValue);
+            Navigator.pop(context, 'OK');
+          });
+        },
+      )
+    ]);
   }
 }

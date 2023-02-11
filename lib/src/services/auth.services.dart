@@ -92,7 +92,7 @@ class AuthServices {
     UsuarioGastos usrgst = UsuarioGastos(
         cleaningAmount: 0,
         foodAmount: 0,
-        idexp: "exp"+uid,
+        idexp: "exp"+uid+"0",
         studyAmount: 0,
         totalAmount: 0,
         transportAmount: 0,
@@ -111,7 +111,7 @@ class AuthServices {
         .set({
       "user_cleaningAmount": usrgst.cleaningAmount,
       "user_foodAmount": usrgst.foodAmount,
-      "user_idexp": "exp"+uid,
+      "user_idexp": usrgst.idexp,
       "user_studyAmount": usrgst.studyAmount,
       "user_totalAmount": usrgst.totalAmount,
       "user_transportAmount": usrgst.transportAmount,
@@ -120,28 +120,21 @@ class AuthServices {
     return;
   }
 
-    Future<void> userNonthReport(String email, String uid) async {
-    UsuarioGastos usrgst = UsuarioGastos(
-        cleaningAmount: 0,
-        foodAmount: 0,
-        idexp: "exp"+uid,
-        studyAmount: 0,
-        totalAmount: 0,
-        transportAmount: 0,
-        variousAmount: 0);
+    Future<void> userNonthReport( String uid, String Date, UsuarioGastos gastos) async {
+
     FirebaseFirestore.instance
         .collection("usuarios")
         .doc(uid)
         .collection("expenses")
-        .doc("exp$uid")
+        .doc("exp$uid$Date")
         .set({
-      "user_cleaningAmount": usrgst.cleaningAmount,
-      "user_foodAmount": usrgst.foodAmount,
-      "user_idexp": "exp"+uid,
-      "user_studyAmount": usrgst.studyAmount,
-      "user_totalAmount": usrgst.totalAmount,
-      "user_transportAmount": usrgst.transportAmount,
-      "user_variousAmount": usrgst.variousAmount
+      "user_cleaningAmount": gastos.cleaningAmount,
+      "user_foodAmount": gastos.foodAmount,
+      "user_idexp": "exp"+uid+Date,
+      "user_studyAmount": gastos.studyAmount,
+      "user_totalAmount": gastos.totalAmount,
+      "user_transportAmount": gastos.transportAmount,
+      "user_variousAmount": gastos.variousAmount
     });
     return;
   }

@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                 const Padding(padding: EdgeInsets.only(top: 40.0)),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.06,
-                  width: MediaQuery.of(context).size.width * 0.7,
+                  width: MediaQuery.of(context).size.width * 0.8,
                   child: Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).dividerColor,
@@ -89,106 +89,127 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const Padding(padding: EdgeInsets.only(top: 20.0)),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.06,
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).dividerColor,
-                        borderRadius: BorderRadius.circular(64.0),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                            offset: const Offset(13.0, 13.0),
-                            color: const Color.fromARGB(255, 56, 89, 122)
-                                .withOpacity(0.3),
-                            spreadRadius: 3.0,
-                            blurRadius: 20.0,
-                          ),
-                          const BoxShadow(
-                            offset: Offset(-12.0, -12.0),
-                            color: Color.fromARGB(255, 122, 126, 205),
-                            spreadRadius: 3.0,
-                            blurRadius: 20.0,
-                          ),
-                        ]),
-                    child: SignInButton(
-                      Buttons.Email,
-                      text: 'Crear cuenta con correo',
-                      onPressed: () {
-                        emailSignUp(context);
-                      },
-                    ),
-                  ),
-                ),
-                const Padding(padding: EdgeInsets.only(top: 20.0)),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.06,
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).dividerColor,
-                      borderRadius: BorderRadius.circular(64.0),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                          offset: const Offset(13.0, 13.0),
-                          color: const Color.fromARGB(255, 56, 89, 122)
-                              .withOpacity(0.3),
-                          spreadRadius: 3.0,
-                          blurRadius: 20.0,
-                        ),
-                        const BoxShadow(
-                          offset: Offset(-12.0, -12.0),
-                          color: Color.fromARGB(255, 122, 126, 205),
-                          spreadRadius: 3.0,
-                          blurRadius: 20.0,
-                        ),
-                      ],
-                    ),
-                    child: SignInButton(
-                      Buttons.Email,
-                      text: 'Iniciar con correo',
-                      onPressed: () {
-                        emailSignIn(context);
-                      },
-                    ),
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: SizedBox(
-                      height: 45,
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color?>(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.pressed)) {
-                                    return Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withOpacity(0.5);
-                                  }
-                                  return null; // Use the component's default.
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        //height: 45,
+                        //width: double.infinity,
+                        child: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).dividerColor,
+                              borderRadius: BorderRadius.circular(64.0),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                  offset: const Offset(13.0, 13.0),
+                                  color: const Color.fromARGB(255, 56, 89, 122)
+                                      .withOpacity(0.3),
+                                  spreadRadius: 3.0,
+                                  blurRadius: 20.0,
+                                ),
+                                const BoxShadow(
+                                  offset: Offset(-12.0, -12.0),
+                                  color: Color.fromARGB(255, 122, 126, 205),
+                                  spreadRadius: 3.0,
+                                  blurRadius: 20.0,
+                                ),
+                              ],
+                            ),
+                            child: ElevatedButton.icon(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty
+                                        .resolveWith<Color?>(
+                                      (Set<MaterialState> states) {
+                                        if (states
+                                            .contains(MaterialState.pressed)) {
+                                          return Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                              .withOpacity(0.5);
+                                        }
+                                        return null; // Use the component's default.
+                                      },
+                                    ),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                            side: BorderSide(
+                                              color: const Color.fromARGB(
+                                                  255, 56, 89, 122),
+                                            )))),
+                                //Agregas la funcion
+                                onPressed: () {
+                                  emailSignUp(context);
                                 },
-                              ),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: BorderSide(
-                                        color: const Color.fromARGB(
-                                            255, 56, 89, 122),
-                                      )))),
-                          //Agregas la funcion
-                          onPressed: () {
-                            emailSignUp(context);
-                          },
-                          icon: const Icon(Icons.login),
-                          label: const Text("Ingresar")),
-                    ),
+                                icon: const Icon(Icons.person),
+                                label: const Text("Crear cuenta con Correo")))),
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 5.0)),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        //height: 45,
+                        //width: double.infinity,
+                        child: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).dividerColor,
+                              borderRadius: BorderRadius.circular(64.0),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                  offset: const Offset(13.0, 13.0),
+                                  color: const Color.fromARGB(255, 56, 89, 122)
+                                      .withOpacity(0.3),
+                                  spreadRadius: 3.0,
+                                  blurRadius: 20.0,
+                                ),
+                                const BoxShadow(
+                                  offset: Offset(-12.0, -12.0),
+                                  color: Color.fromARGB(255, 122, 126, 205),
+                                  spreadRadius: 3.0,
+                                  blurRadius: 20.0,
+                                ),
+                              ],
+                            ),
+                            child: ElevatedButton.icon(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty
+                                        .resolveWith<Color?>(
+                                      (Set<MaterialState> states) {
+                                        if (states
+                                            .contains(MaterialState.pressed)) {
+                                          return Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                              .withOpacity(0.5);
+                                        }
+                                        return null; // Use the component's default.
+                                      },
+                                    ),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                            side: BorderSide(
+                                              color: const Color.fromARGB(
+                                                  255, 56, 89, 122),
+                                            )))),
+                                //Agregas la funcion
+                                onPressed: () {
+                                  emailSignIn(context);
+                                },
+                                icon: const Icon(Icons.login),
+                                label: const Text("Ingresar con Correo ")))),
                   ),
                 ),
               ],
@@ -210,9 +231,30 @@ emailSignUp(context) {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text(
-            'Registro',
-            textAlign: TextAlign.center,
+          title: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).dividerColor,
+              borderRadius: BorderRadius.circular(64.0),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  offset: const Offset(13.0, 13.0),
+                  color: Color.fromARGB(255, 225, 220, 229).withOpacity(0.3),
+                  spreadRadius: 3.0,
+                  blurRadius: 20.0,
+                ),
+                const BoxShadow(
+                  offset: Offset(-12.0, -12.0),
+                  color: Color.fromARGB(255, 237, 238, 245),
+                  spreadRadius: 3.0,
+                  blurRadius: 20.0,
+                ),
+              ],
+            ),
+            child: Text(
+              'Registro',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -289,10 +331,30 @@ emailSignIn(context) {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title:  Text(
-            'Login',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Theme.of(context).primaryColor),
+          title: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).dividerColor,
+              borderRadius: BorderRadius.circular(64.0),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  offset: const Offset(13.0, 13.0),
+                  color: Color.fromARGB(255, 225, 220, 229).withOpacity(0.3),
+                  spreadRadius: 3.0,
+                  blurRadius: 20.0,
+                ),
+                const BoxShadow(
+                  offset: Offset(-12.0, -12.0),
+                  color: Color.fromARGB(255, 237, 238, 245),
+                  spreadRadius: 3.0,
+                  blurRadius: 20.0,
+                ),
+              ],
+            ),
+            child: Text(
+              'Login',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,

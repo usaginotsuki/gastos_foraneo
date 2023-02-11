@@ -33,14 +33,14 @@ class AppTheme {
 
   static ThemeData themeData(bool ligthMode) {
     return ThemeData(
-        primaryColor: HexColor("#40916c"),
+        primaryColor: HexColor("#4b4293"),
         primaryColorDark: HexColor("#14213d"),
         primaryColorLight: HexColor("#e5e5e5"),
         tabBarTheme: TabBarTheme(
             unselectedLabelColor: Colors.grey,
             labelColor: ligthMode ? HexColor("#40916c") : Colors.white),
         colorScheme: ColorScheme(
-          primary: HexColor("#40916c"),
+          primary: HexColor("#4b4293"),
           primaryVariant: HexColor("#e5e5e5"),
           secondary: HexColor("#14213d"),
           secondaryVariant: HexColor("#0077b6"),

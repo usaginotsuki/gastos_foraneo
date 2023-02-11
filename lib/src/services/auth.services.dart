@@ -52,7 +52,12 @@ class AuthServices {
       dev.log(e.toString());
     }
   }
-
+  logoutGoogle(BuildContext context) async {
+    await _googleSignIn.signOut().then((value) => 
+     DialogUtils.showAlertAndSendLoginScreen(
+          context, "Ha salido exitosamente")
+    );
+  }
   loginWithGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     final GoogleSignInAccount? googleSignInAccount =
@@ -80,12 +85,12 @@ class AuthServices {
       } catch (e) {
         // handle the error here
       }
+      
     }
+    
   }
 
-  logoutGoogle() async {
-    await _googleSignIn.signOut();
-  }
+
 //Crud para la creacion de usuario
   Future<void> userSetup(String email, String uid) async {
     Usuario usr = Usuario(correo: email, id: "", name: "", phone: "");
@@ -107,7 +112,7 @@ class AuthServices {
         .collection("usuarios")
         .doc(uid)
         .collection("expenses")
-        .doc("exp$uid")
+        .doc("exp$uid"+"0")
         .set({
       "user_cleaningAmount": usrgst.cleaningAmount,
       "user_foodAmount": usrgst.foodAmount,

@@ -5,6 +5,7 @@ import 'package:gastos_foraneo/src/models/user_model.dart';
 import 'package:provider/provider.dart';
 import '../Widgets/utils/dialog_ulit.dart';
 import '../Widgets/BottomMenu/bottom_menu_widget.dart';
+import '../services/auth.services.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -14,6 +15,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  AuthServices auth = AuthServices();
   CollectionReference cliente =
       FirebaseFirestore.instance.collection('usuarios');
   String type = "";
@@ -83,6 +85,46 @@ class _SettingPageState extends State<SettingPage> {
                               _alertDialog(type, controllerTextPhone);
                             },
                             icon: Icon(Icons.edit_outlined)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: SizedBox(
+                            height: 45,
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty
+                                        .resolveWith<Color?>(
+                                      (Set<MaterialState> states) {
+                                        if (states
+                                            .contains(MaterialState.pressed)) {
+                                          return Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                              .withOpacity(0.5);
+                                        }
+                                        return null; // Use the component's default.
+                                      },
+                                    ),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                            side: BorderSide(
+                                              color: const Color.fromARGB(
+                                                  255, 56, 89, 122),
+                                            )))),
+                                //Agregas la funcion
+                                onPressed: () {
+                                  auth.logoutGoogle(context);
+                                },
+                                icon: const Icon(Icons.logout),
+                                label: const Text("Salir Sesion")),
+                          ),
+                        ),
                       ),
                     ],
                   )),

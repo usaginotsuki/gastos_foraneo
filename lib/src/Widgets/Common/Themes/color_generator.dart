@@ -3,17 +3,17 @@ import '../../../../Core/Colors/Hex_Color.dart';
 
 class AppTheme {
   static final TextTheme textTheme = TextTheme(
-    headline1: _headLine1,
-    headline2: _headLine2,
-    headline3: _headLine3,
-    headline4: _headLine4,
-    headline5: _headLine5,
-    headline6: _headLine6,
-    bodyText1: _bodyText1,
-    bodyText2: _bodyText2,
-    subtitle1: _subTitle1,
-    subtitle2: _subTitle2,
-    caption: _caption,
+    displayLarge: _headLine1,
+    displayMedium: _headLine2,
+    displaySmall: _headLine3,
+    headlineMedium: _headLine4,
+    headlineSmall: _headLine5,
+    titleLarge: _headLine6,
+    bodyLarge: _bodyText1,
+    bodyMedium: _bodyText2,
+    titleMedium: _subTitle1,
+    titleSmall: _subTitle2,
+    bodySmall: _caption,
   );
 
   static const TextStyle _headLine1 =
@@ -33,17 +33,15 @@ class AppTheme {
 
   static ThemeData themeData(bool ligthMode) {
     return ThemeData(
-        primaryColor: HexColor("#40916c"),
+        primaryColor: HexColor("#4b4293"),
         primaryColorDark: HexColor("#14213d"),
         primaryColorLight: HexColor("#e5e5e5"),
         tabBarTheme: TabBarTheme(
             unselectedLabelColor: Colors.grey,
             labelColor: ligthMode ? HexColor("#40916c") : Colors.white),
         colorScheme: ColorScheme(
-          primary: HexColor("#40916c"),
-          primaryVariant: HexColor("#e5e5e5"),
+          primary: HexColor("#4b4293"),
           secondary: HexColor("#14213d"),
-          secondaryVariant: HexColor("#0077b6"),
           surface: Colors.white,
           background: Colors.white70,
           error: Colors.red,

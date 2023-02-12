@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../Widgets/BottomMenu/bottom_menu_widget.dart';
 import '../Widgets/utils/dialog_ulit.dart';
-import '../models/user_model.dart';
+import '../services/auth.services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,11 +24,13 @@ class _HomePageState extends State<HomePage> {
   TextEditingController controllerTextTrasn = TextEditingController();
   TextEditingController controllerTextVario = TextEditingController();
 
+  AuthServices auth = AuthServices();
   PageController _controller = PageController();
   int currentPage = DateTime.now().month - 1;
   String tipodepago = "";
+  String yeardata = "0";
+  bool? hasDataf;
   FirebaseFirestore dataUserFuture = FirebaseFirestore.instance;
-  Usuario usr = Usuario(correo: "", id: "", name: "", phone: "");
   UsuarioGastos usrgst = UsuarioGastos(
       cleaningAmount: 0,
       foodAmount: 0,
@@ -40,6 +42,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    hasDataf = true;
   }
 
   @override
@@ -51,52 +54,136 @@ class _HomePageState extends State<HomePage> {
         .collection("expenses");
     _editParamGastos(String type, String newValue) {
       final mainProvider = Provider.of<MainProvider>(context, listen: false);
-      clientegastos.doc("exp" + mainProvider.token).update((type == "limpieza")
-          ? {
-              'user_cleaningAmount': num.parse(newValue),
-            }
+      UsuarioGastos gst = UsuarioGastos(
+          cleaningAmount: 0,
+          foodAmount: 0,
+          idexp: "",
+          studyAmount: 0,
+          totalAmount: 0,
+          transportAmount: 0,
+          variousAmount: 0);
+      (type == "limpieza")
+          ? gst.cleaningAmount = num.parse(newValue)
           : (type == "comida")
-              ? {
-                  'user_foodAmount': num.parse(newValue),
-                }
+              ? gst.foodAmount = num.parse(newValue)
               : (type == "estudio")
+                  ? gst.studyAmount = num.parse(newValue)
+                  : (type == "transporte")
+                      ? gst.transportAmount = num.parse(newValue)
+                      : (type == "varios")
+                          ? gst.variousAmount = num.parse(newValue)
+                          : (type == "fondos")
+                              ? gst.totalAmount = num.parse(newValue)
+                              : gst.totalAmount;
+      clientegastos
+          .doc("exp" + mainProvider.token + yeardata)
+          .update((type == "limpieza")
+              ? {
+                  'user_cleaningAmount': num.parse(newValue),
+                }
+              : (type == "comida")
                   ? {
-                      'user_studyAmount': num.parse(newValue),
+                      'user_foodAmount': num.parse(newValue),
                     }
                   : (type == "estudio")
                       ? {
-                          'user_transportAmount': num.parse(newValue),
+                          'user_studyAmount': num.parse(newValue),
                         }
                       : (type == "transporte")
                           ? {
-                              'user_variousAmount': num.parse(newValue),
+                              'user_transportAmount': num.parse(newValue),
                             }
                           : (type == "varios")
                               ? {
-                                 'user_variousAmount': num.parse(newValue),
-                              }
-                              : {
-                                  "user_totalAmount": num.parse(newValue),
-                                });
+                                  'user_variousAmount': num.parse(newValue),
+                                }
+                              : (type == "fondos")
+                                  ? {
+                                      'user_totalAmount': num.parse(newValue),
+                                    }
+                                  : {});
     }
+
+    TextEditingController _controllers = TextEditingController();
 
     _alertDialog(String type, TextEditingController controller) {
       DialogUtils.showAlertWithCustomActions(context, "", [
-        TextFormField(
-          decoration: InputDecoration(labelText: "Escriba el nuevo $type"),
-          controller: controller,
-          keyboardType: TextInputType.number,
-          inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.allow(RegExp(r'^[1-9][\.\d]*(,\d+)?$')),
-          ],
-          onFieldSubmitted: (newValue) {
+        (type != "reporte")
+            ? TextFormField(
+                decoration:
+                    InputDecoration(labelText: "Agrege un nuevo monto a $type"),
+                controller: _controllers,
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.allow(
+                      RegExp(r'^[1-9][\.\d]*(,\d+)?$')),
+                ],
+                onTap: () {
+                  _controllers.clear();
+                },
+                onFieldSubmitted: (newValue) {
+                  setState(() {
+                    if (type != "reporte") {
+                      _editParamGastos(type, newValue);
+                      Navigator.pop(context, 'OK');
+                    }
+                  });
+                },
+              )
+            : Row(
+                children: [
+                  OutlinedButton(
+                      onPressed: () {
+                        auth.userNonthReport(
+                            mainProvider.token, yeardata, usrgst);
+                        Navigator.pop(context, 'OK');
+                      },
+                      child: Text("Enviar")),
+                  OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context, 'OK');
+                        // print("gasos " + controllerTextEstu.toString());
+                      },
+                      child: Text("Cancelar")),
+                ],
+              )
+      ]);
+    }
+
+    var streamBuilderGastos = clientegastos
+        .where("user_idexp", isEqualTo: "exp" + mainProvider.token + yeardata)
+        .snapshots();
+
+    Widget _selector() {
+      return SizedBox.fromSize(
+        size: Size.fromHeight(70.0),
+        child: PageView(
+          onPageChanged: (newPage) {
             setState(() {
-              _editParamGastos(type, newValue);
-              Navigator.pop(context, 'OK');
+              yeardata = newPage.toString();
+              streamBuilderGastos = clientegastos
+                  .where("user_idexp",
+                      isEqualTo: "exp" + mainProvider.token + yeardata)
+                  .snapshots();
             });
           },
-        )
-      ]);
+          controller: _controller,
+          children: <Widget>[
+            _pageItem("Enero", 0),
+            _pageItem("Febrero", 1),
+            _pageItem("Marzo", 2),
+            _pageItem("Abril", 3),
+            _pageItem("Mayo", 4),
+            _pageItem("Junio", 5),
+            _pageItem("Julio", 6),
+            _pageItem("Agosto", 7),
+            _pageItem("Septiembre", 8),
+            _pageItem("Octubre", 9),
+            _pageItem("Noviembre", 10),
+            _pageItem("Diciembre", 11),
+          ],
+        ),
+      );
     }
 
     return Scaffold(
@@ -104,24 +191,45 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Pagina Principal"),
       ),
       body: SingleChildScrollView(
-          child: StreamBuilder(
-              stream: clientegastos.snapshots(),
+          child: Column(
+        children: [
+          _selector(),
+          OutlinedButton(
+              onPressed: () {
+                tipodepago = "reporte";
+                _alertDialog(tipodepago, controllerTextTota);
+              },
+              child: Text("Generar un Nuevo Reporte")),
+          StreamBuilder(
+              stream: streamBuilderGastos,
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return Center(child: CircularProgressIndicator());
+                  case ConnectionState.none:
+                  default:
+                    if (snapshot.hasData) {
+                      hasDataf = false;
+                    } else if (snapshot.hasError) {
+                      hasDataf = true;
+                    }
                 }
+
                 return Column(
                     children: snapshot.data!.docs.map((gastos) {
                   var gasto = UsuarioGastos.fromJson(
                       gastos.data() as Map<String, dynamic>);
+
+                  usrgst = gasto;
+
                   num total = gasto.cleaningAmount +
                       gasto.foodAmount +
                       gasto.studyAmount +
                       gasto.transportAmount +
                       gasto.variousAmount;
+
                   return Column(
                     children: [
-                      _selector(),
                       Column(
                         children: [
                           Text(
@@ -146,7 +254,8 @@ class _HomePageState extends State<HomePage> {
                                   child: ListTile(
                                     onTap: () {
                                       tipodepago = "limpieza";
-                                      _alertDialog(tipodepago, controllerTextLimp);
+                                      _alertDialog(
+                                          tipodepago, controllerTextLimp);
                                     },
                                     leading: Icon(Icons.wash),
                                     title: const Text("Limpieza"),
@@ -161,7 +270,8 @@ class _HomePageState extends State<HomePage> {
                                   child: ListTile(
                                     onTap: () {
                                       tipodepago = "comida";
-                                      _alertDialog(tipodepago, controllerTextComi);
+                                      _alertDialog(
+                                          tipodepago, controllerTextComi);
                                     },
                                     leading: Icon(Icons.food_bank),
                                     title: const Text("Comida"),
@@ -173,9 +283,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Card(
                                   child: ListTile(
-                                     onTap: () {
-                                      tipodepago = "estudios";
-                                      _alertDialog(tipodepago, controllerTextComi);
+                                    onTap: () {
+                                      tipodepago = "estudio";
+                                      _alertDialog(
+                                          tipodepago, controllerTextComi);
                                     },
                                     leading: Icon(Icons.book),
                                     title: const Text("Estudios"),
@@ -187,9 +298,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Card(
                                   child: ListTile(
-                                      onTap: () {
+                                    onTap: () {
                                       tipodepago = "transporte";
-                                      _alertDialog(tipodepago, controllerTextComi);
+                                      _alertDialog(
+                                          tipodepago, controllerTextComi);
                                     },
                                     leading: Icon(Icons.bus_alert),
                                     title: const Text("Transporte"),
@@ -202,9 +314,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Card(
                                   child: ListTile(
-                                      onTap: () {
+                                    onTap: () {
                                       tipodepago = "varios";
-                                      _alertDialog(tipodepago, controllerTextComi);
+                                      _alertDialog(
+                                          tipodepago, controllerTextComi);
                                     },
                                     leading: Icon(Icons.festival),
                                     title: const Text("Varios"),
@@ -222,38 +335,17 @@ class _HomePageState extends State<HomePage> {
                       ),
                       OutlinedButton(
                           onPressed: () {
-                               tipodepago = "fondos";
-                                      _alertDialog(tipodepago, controllerTextTota);
-                          }, child: Text("Agregar Fondos"))
+                            tipodepago = "fondos";
+                            _alertDialog(tipodepago, controllerTextTota);
+                          },
+                          child: Text("Agregar Fondos")),
                     ],
                   );
                 }).toList());
-              })),
-      bottomNavigationBar: const BottomMenuWidget(selectedIndex: 1),
-    );
-  }
-
-  Widget _selector() {
-    return SizedBox.fromSize(
-      size: Size.fromHeight(70.0),
-      child: PageView(
-        onPageChanged: (newPage) {},
-        controller: _controller,
-        children: <Widget>[
-          _pageItem("Enero", 0),
-          _pageItem("Febrero", 1),
-          _pageItem("Marzo", 2),
-          _pageItem("Abril", 3),
-          _pageItem("Mayo", 4),
-          _pageItem("Junio", 5),
-          _pageItem("Julio", 6),
-          _pageItem("Augosto", 7),
-          _pageItem("Septiembre", 8),
-          _pageItem("Octubre", 9),
-          _pageItem("Noviembre", 10),
-          _pageItem("Diciembre", 11),
+              }),
         ],
-      ),
+      )),
+      bottomNavigationBar: const BottomMenuWidget(selectedIndex: 1),
     );
   }
 

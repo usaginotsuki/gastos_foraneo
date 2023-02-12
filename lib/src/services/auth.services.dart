@@ -22,13 +22,6 @@ class AuthServices {
     try {
       dev.log(email.toString());
       dev.log(password.toString());
-      var credential = await auth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) {
-        userSetup(email, value.user!.uid);
-        DialogUtils.showAlertAndSendLoginScreen(
-            context, "Usuario creado correctamente");
-      });
     } catch (e) {
       DialogUtils.showAlertAndSendLoginScreen(
           context, "Error al crear el usuario");
@@ -42,7 +35,7 @@ class AuthServices {
       await auth
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) {
-                   mainProvider.token = value.user!.uid;
+        mainProvider.token = value.user!.uid;
         DialogUtils.showAlertAndSendHomeScreen(
             context, "Ha ingresado exitosamente");
       });
@@ -51,6 +44,12 @@ class AuthServices {
           context, "La contraseña o el correo estan incorrectos");
       dev.log(e.toString());
     }
+  }
+
+  logoutGoogle(BuildContext context) async {
+    await _googleSignIn.signOut().then((value) =>
+        DialogUtils.showAlertAndSendLoginScreen(
+            context, "Ha salido exitosamente"));
   }
 
   loginWithGoogle() async {
@@ -83,16 +82,13 @@ class AuthServices {
     }
   }
 
-  logoutGoogle() async {
-    await _googleSignIn.signOut();
-  }
 //Crud para la creacion de usuario
   Future<void> userSetup(String email, String uid) async {
     Usuario usr = Usuario(correo: email, id: "", name: "", phone: "");
     UsuarioGastos usrgst = UsuarioGastos(
         cleaningAmount: 0,
         foodAmount: 0,
-        idexp: "exp"+uid,
+        idexp: "exp" + uid + "0",
         studyAmount: 0,
         totalAmount: 0,
         transportAmount: 0,
@@ -107,15 +103,34 @@ class AuthServices {
         .collection("usuarios")
         .doc(uid)
         .collection("expenses")
-        .doc("exp$uid")
+        .doc("exp$uid" + "0")
         .set({
       "user_cleaningAmount": usrgst.cleaningAmount,
       "user_foodAmount": usrgst.foodAmount,
-      "user_idexp": "exp"+uid,
+      "user_idexp": usrgst.idexp,
       "user_studyAmount": usrgst.studyAmount,
       "user_totalAmount": usrgst.totalAmount,
       "user_transportAmount": usrgst.transportAmount,
       "user_variousAmount": usrgst.variousAmount
+    });
+    return;
+  }
+
+  Future<void> userNonthReport(
+      String uid, String Date, UsuarioGastos gastos) async {
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .collection("expenses")
+        .doc("exp$uid$Date")
+        .set({
+      "user_cleaningAmount": gastos.cleaningAmount,
+      "user_foodAmount": gastos.foodAmount,
+      "user_idexp": "exp" + uid + Date,
+      "user_studyAmount": gastos.studyAmount,
+      "user_totalAmount": gastos.totalAmount,
+      "user_transportAmount": gastos.transportAmount,
+      "user_variousAmount": gastos.variousAmount
     });
     return;
   }

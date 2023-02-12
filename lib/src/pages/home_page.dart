@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 
 import '../Widgets/BottomMenu/bottom_menu_widget.dart';
 import '../Widgets/utils/dialog_ulit.dart';
-import '../models/user_model.dart';
 import '../services/auth.services.dart';
 
 class HomePage extends StatefulWidget {
@@ -109,18 +108,23 @@ class _HomePageState extends State<HomePage> {
                                   : {});
     }
 
+    TextEditingController _controllers = TextEditingController();
+
     _alertDialog(String type, TextEditingController controller) {
       DialogUtils.showAlertWithCustomActions(context, "", [
         (type != "reporte")
             ? TextFormField(
                 decoration:
                     InputDecoration(labelText: "Agrege un nuevo monto a $type"),
-                controller: controller,
+                controller: _controllers,
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(
                       RegExp(r'^[1-9][\.\d]*(,\d+)?$')),
                 ],
+                onTap: () {
+                  _controllers.clear();
+                },
                 onFieldSubmitted: (newValue) {
                   setState(() {
                     if (type != "reporte") {
@@ -142,6 +146,7 @@ class _HomePageState extends State<HomePage> {
                   OutlinedButton(
                       onPressed: () {
                         Navigator.pop(context, 'OK');
+                        // print("gasos " + controllerTextEstu.toString());
                       },
                       child: Text("Cancelar")),
                 ],

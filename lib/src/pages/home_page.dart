@@ -27,12 +27,14 @@ class _HomePageState extends State<HomePage> {
   TextEditingController controllerTextTrasn = TextEditingController();
   TextEditingController controllerTextVario = TextEditingController();
 
+  bool isVisible = true;
+
   AuthServices auth = AuthServices();
   PageController _controller = PageController();
   int currentPage = DateTime.now().month - 1;
   String tipodepago = "";
   String yeardata = "0";
-  bool? hasDataf;
+  bool hasDataf = true;
   FirebaseFirestore dataUserFuture = FirebaseFirestore.instance;
   UsuarioGastos usrgst = UsuarioGastos(
       cleaningAmount: 0,
@@ -191,25 +193,29 @@ class _HomePageState extends State<HomePage> {
           child: Column(
         children: [
           _selector(),
-
-               OutlinedButton(
-                  onPressed: () {
-                    tipodepago = "reporte";
-                    _alertDialog(tipodepago, controllerTextTota);
-                  },
-                  child: Text("Generar un Nuevo Reporte")),
-           
+          Visibility(
+            visible: isVisible,
+            child: OutlinedButton(
+                onPressed: () {
+                  tipodepago = "reporte";
+                  _alertDialog(tipodepago, controllerTextTota);
+                },
+                child: Text("Generar un Nuevo Reporte")),
+          ),
           StreamBuilder(
               stream: streamBuilderGastos,
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if(snapshot.data?.docs.length == 0){isVisible = true; } else{isVisible = false;}
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
                     return Center(child: CircularProgressIndicator());
+                  case ConnectionState.active:
+
                   case ConnectionState.none:
                   default:
-                    if (snapshot.hasData) {
+                    if (snapshot.data?.docs.length == 0) {
                       hasDataf = false;
-                    } else if (snapshot.hasError) {
+                    } else {
                       hasDataf = true;
                     }
                 }
@@ -342,7 +348,6 @@ class _HomePageState extends State<HomePage> {
                   );
                 }).toList());
               }),
- 
         ],
       )),
       bottomNavigationBar: const BottomMenuWidget(selectedIndex: 1),

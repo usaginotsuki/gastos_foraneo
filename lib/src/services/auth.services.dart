@@ -22,13 +22,6 @@ class AuthServices {
     try {
       dev.log(email.toString());
       dev.log(password.toString());
-      var credential = await auth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) {
-        userSetup(email, value.user!.uid);
-        DialogUtils.showAlertAndSendLoginScreen(
-            context, "Usuario creado correctamente");
-      });
     } catch (e) {
       DialogUtils.showAlertAndSendLoginScreen(
           context, "Error al crear el usuario");
@@ -42,7 +35,7 @@ class AuthServices {
       await auth
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) {
-                   mainProvider.token = value.user!.uid;
+        mainProvider.token = value.user!.uid;
         DialogUtils.showAlertAndSendHomeScreen(
             context, "Ha ingresado exitosamente");
       });

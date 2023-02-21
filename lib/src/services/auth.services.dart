@@ -22,6 +22,14 @@ class AuthServices {
     try {
       dev.log(email.toString());
       dev.log(password.toString());
+      await auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) {
+        userSetup(email, value.user!.uid);
+
+        DialogUtils.showAlertAndSendLoginScreen(
+            context, "Usuario creado correctamente");
+      });
     } catch (e) {
       DialogUtils.showAlertAndSendLoginScreen(
           context, "Error al crear el usuario");
@@ -45,12 +53,13 @@ class AuthServices {
       dev.log(e.toString());
     }
   }
+
   logoutGoogle(BuildContext context) async {
-    await _googleSignIn.signOut().then((value) => 
-     DialogUtils.showAlertAndSendLoginScreen(
-          context, "Ha salido exitosamente")
-    );
+    await _googleSignIn.signOut().then((value) =>
+        DialogUtils.showAlertAndSendLoginScreen(
+            context, "Ha salido exitosamente"));
   }
+
   loginWithGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     final GoogleSignInAccount? googleSignInAccount =
@@ -78,11 +87,8 @@ class AuthServices {
       } catch (e) {
         // handle the error here
       }
-      
     }
-    
   }
-
 
 //Crud para la creacion de usuario
   Future<void> userSetup(String email, String uid) async {
@@ -90,7 +96,7 @@ class AuthServices {
     UsuarioGastos usrgst = UsuarioGastos(
         cleaningAmount: 0,
         foodAmount: 0,
-        idexp: "exp"+uid+"0",
+        idexp: "exp" + uid + "0",
         studyAmount: 0,
         totalAmount: 0,
         transportAmount: 0,
@@ -105,7 +111,7 @@ class AuthServices {
         .collection("usuarios")
         .doc(uid)
         .collection("expenses")
-        .doc("exp$uid"+"0")
+        .doc("exp$uid" + "0")
         .set({
       "user_cleaningAmount": usrgst.cleaningAmount,
       "user_foodAmount": usrgst.foodAmount,
@@ -115,11 +121,165 @@ class AuthServices {
       "user_transportAmount": usrgst.transportAmount,
       "user_variousAmount": usrgst.variousAmount
     });
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .collection("expenses")
+        .doc("exp$uid" + "1")
+        .set({
+      "user_cleaningAmount": usrgst.cleaningAmount,
+      "user_foodAmount": usrgst.foodAmount,
+      "user_idexp": "exp$uid" + "1",
+      "user_studyAmount": usrgst.studyAmount,
+      "user_totalAmount": usrgst.totalAmount,
+      "user_transportAmount": usrgst.transportAmount,
+      "user_variousAmount": usrgst.variousAmount
+    });
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .collection("expenses")
+        .doc("exp$uid" + "2")
+        .set({
+      "user_cleaningAmount": usrgst.cleaningAmount,
+      "user_foodAmount": usrgst.foodAmount,
+      "user_idexp": "exp$uid" + "2",
+      "user_studyAmount": usrgst.studyAmount,
+      "user_totalAmount": usrgst.totalAmount,
+      "user_transportAmount": usrgst.transportAmount,
+      "user_variousAmount": usrgst.variousAmount
+    });
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .collection("expenses")
+        .doc("exp$uid" + "3")
+        .set({
+      "user_cleaningAmount": usrgst.cleaningAmount,
+      "user_foodAmount": usrgst.foodAmount,
+      "user_idexp": "exp$uid" + "3",
+      "user_studyAmount": usrgst.studyAmount,
+      "user_totalAmount": usrgst.totalAmount,
+      "user_transportAmount": usrgst.transportAmount,
+      "user_variousAmount": usrgst.variousAmount
+    });
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .collection("expenses")
+        .doc("exp$uid" + "4")
+        .set({
+      "user_cleaningAmount": usrgst.cleaningAmount,
+      "user_foodAmount": usrgst.foodAmount,
+      "user_idexp": "exp$uid" + "4",
+      "user_studyAmount": usrgst.studyAmount,
+      "user_totalAmount": usrgst.totalAmount,
+      "user_transportAmount": usrgst.transportAmount,
+      "user_variousAmount": usrgst.variousAmount
+    });
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .collection("expenses")
+        .doc("exp$uid" + "5")
+        .set({
+      "user_cleaningAmount": usrgst.cleaningAmount,
+      "user_foodAmount": usrgst.foodAmount,
+      "user_idexp": "exp$uid" + "5",
+      "user_studyAmount": usrgst.studyAmount,
+      "user_totalAmount": usrgst.totalAmount,
+      "user_transportAmount": usrgst.transportAmount,
+      "user_variousAmount": usrgst.variousAmount
+    });
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .collection("expenses")
+        .doc("exp$uid" + "6")
+        .set({
+      "user_cleaningAmount": usrgst.cleaningAmount,
+      "user_foodAmount": usrgst.foodAmount,
+      "user_idexp": "exp$uid" + "6",
+      "user_studyAmount": usrgst.studyAmount,
+      "user_totalAmount": usrgst.totalAmount,
+      "user_transportAmount": usrgst.transportAmount,
+      "user_variousAmount": usrgst.variousAmount
+    });
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .collection("expenses")
+        .doc("exp$uid" + "7")
+        .set({
+      "user_cleaningAmount": usrgst.cleaningAmount,
+      "user_foodAmount": usrgst.foodAmount,
+      "user_idexp": "exp$uid" + "7",
+      "user_studyAmount": usrgst.studyAmount,
+      "user_totalAmount": usrgst.totalAmount,
+      "user_transportAmount": usrgst.transportAmount,
+      "user_variousAmount": usrgst.variousAmount
+    });
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .collection("expenses")
+        .doc("exp$uid" + "8")
+        .set({
+      "user_cleaningAmount": usrgst.cleaningAmount,
+      "user_foodAmount": usrgst.foodAmount,
+      "user_idexp": "exp$uid" + "8",
+      "user_studyAmount": usrgst.studyAmount,
+      "user_totalAmount": usrgst.totalAmount,
+      "user_transportAmount": usrgst.transportAmount,
+      "user_variousAmount": usrgst.variousAmount
+    });
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .collection("expenses")
+        .doc("exp$uid" + "9")
+        .set({
+      "user_cleaningAmount": usrgst.cleaningAmount,
+      "user_foodAmount": usrgst.foodAmount,
+      "user_idexp": "exp$uid" + "9",
+      "user_studyAmount": usrgst.studyAmount,
+      "user_totalAmount": usrgst.totalAmount,
+      "user_transportAmount": usrgst.transportAmount,
+      "user_variousAmount": usrgst.variousAmount
+    });
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .collection("expenses")
+        .doc("exp$uid" + "10")
+        .set({
+      "user_cleaningAmount": usrgst.cleaningAmount,
+      "user_foodAmount": usrgst.foodAmount,
+      "user_idexp": "exp$uid" + "10",
+      "user_studyAmount": usrgst.studyAmount,
+      "user_totalAmount": usrgst.totalAmount,
+      "user_transportAmount": usrgst.transportAmount,
+      "user_variousAmount": usrgst.variousAmount
+    });
+    FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(uid)
+        .collection("expenses")
+        .doc("exp$uid" + "11")
+        .set({
+      "user_cleaningAmount": usrgst.cleaningAmount,
+      "user_foodAmount": usrgst.foodAmount,
+      "user_idexp": "exp$uid" + "11",
+      "user_studyAmount": usrgst.studyAmount,
+      "user_totalAmount": usrgst.totalAmount,
+      "user_transportAmount": usrgst.transportAmount,
+      "user_variousAmount": usrgst.variousAmount
+    });
     return;
   }
 
-    Future<void> userNonthReport( String uid, String Date, UsuarioGastos gastos) async {
-
+  Future<void> userNonthReport(
+      String uid, String Date, UsuarioGastos gastos) async {
     FirebaseFirestore.instance
         .collection("usuarios")
         .doc(uid)
@@ -128,7 +288,7 @@ class AuthServices {
         .set({
       "user_cleaningAmount": gastos.cleaningAmount,
       "user_foodAmount": gastos.foodAmount,
-      "user_idexp": "exp"+uid+Date,
+      "user_idexp": "exp" + uid + Date,
       "user_studyAmount": gastos.studyAmount,
       "user_totalAmount": gastos.totalAmount,
       "user_transportAmount": gastos.transportAmount,

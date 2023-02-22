@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -57,7 +55,6 @@ class _HomePageState extends State<HomePage> {
         .doc(mainProvider.token)
         .collection("expenses");
     _editParamGastos(String type, String newValue) {
-      final mainProvider = Provider.of<MainProvider>(context, listen: false);
       UsuarioGastos gst = UsuarioGastos(
           cleaningAmount: 0,
           foodAmount: 0,
@@ -210,7 +207,11 @@ class _HomePageState extends State<HomePage> {
           StreamBuilder(
               stream: streamBuilderGastos,
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if(snapshot.data?.docs.length == 0){isVisible = true; } else{isVisible = false;}
+                if (snapshot.data?.docs.length == 0) {
+                  isVisible = true;
+                } else if (snapshot.data?.docs.length != 0) {
+                  isVisible = false;
+                }
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
                     return Center(child: CircularProgressIndicator());

@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/button_list.dart';
-import 'package:flutter_signin_button/button_view.dart';
 import 'package:gastos_foraneo/src/Providers/main_provider.dart';
 import 'package:gastos_foraneo/src/models/user_model.dart';
 import 'package:provider/provider.dart';
@@ -88,6 +86,7 @@ class _SettingPageState extends State<SettingPage> {
                             },
                             icon: Icon(Icons.edit_outlined)),
                       ),
+                    
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Align(

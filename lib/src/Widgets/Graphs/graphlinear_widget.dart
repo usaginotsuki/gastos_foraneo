@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart';
+import 'package:flutter/material.dart';
 
 class LinearGraphWidget extends StatefulWidget {
   const LinearGraphWidget({super.key, required this.incomeData});

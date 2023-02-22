@@ -4,6 +4,7 @@ import 'package:gastos_foraneo/src/pages/information_page.dart';
 import 'package:gastos_foraneo/src/pages/setting_page.dart';
 
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
+import 'package:page_transition/page_transition.dart';
 
 class BottomMenuWidget extends StatefulWidget {
   const BottomMenuWidget({super.key, required this.selectedIndex});
@@ -53,17 +54,32 @@ class _BottomMenuWidgetState extends State<BottomMenuWidget> {
       setState(() {
         indexSelected = index;
         if (indexSelected == 0) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const SettingPage()),
-              (route) => false);
+         Navigator.push(
+                 context,
+                  PageTransition(
+                    type: PageTransitionType.leftToRight,
+                    child: SettingPage(),
+                    duration: Duration(milliseconds: 400),
+                  ),
+            );
         } else if (indexSelected == 1) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const HomePage()),
-              (route) => false);
+           Navigator.push(
+                 context,
+                  PageTransition(
+                    type: PageTransitionType.fade,
+                    child: HomePage(),
+                    duration: Duration(milliseconds: 500),
+                  ),
+            );
         } else if (indexSelected == 2) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const InformationPage()),
-              (route) => false);
+         Navigator.push(
+                 context,
+                  PageTransition(
+                    type: PageTransitionType.leftToRightWithFade,
+                    child: InformationPage(),
+                    duration: Duration(milliseconds: 500),
+                  ),
+            );
         }
       });
     }

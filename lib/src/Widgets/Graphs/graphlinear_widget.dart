@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -59,11 +57,9 @@ class _LinearGraphWidgetState extends State<LinearGraphWidget> {
   _onSelectionChanged(SelectionModel model) {
     final selectedDatum = model.selectedDatum;
 
-    var time;
     final measures = <String, double>{};
 
     if (selectedDatum.isNotEmpty) {
-      time = selectedDatum.first.datum;
       selectedDatum.forEach((SeriesDatum datumPair) {
         measures[datumPair.series.displayName!] = datumPair.datum;
       });

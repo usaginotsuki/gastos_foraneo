@@ -1,5 +1,4 @@
 import 'package:charts_flutter/flutter.dart';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -14,7 +13,7 @@ class PieGraphWidget extends StatefulWidget {
 class _PieGraphWidgetState extends State<PieGraphWidget> {
   @override
   Widget build(BuildContext context) {
-  final  List< Series<double, num>> series = [
+    final List<Series<double, num>> series = [
       Series<double, num>(
         id: 'Gastox',
         domainFn: (value, index) => index!,
@@ -25,9 +24,8 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
       )
     ];
 
-    return PieChart (
+    return PieChart(
       series,
-     
     );
   }
 }

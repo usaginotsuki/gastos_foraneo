@@ -31,7 +31,6 @@ class _InformationPageState extends State<InformationPage> {
   int currentPage = DateTime.now().month - 1;
   @override
   void dispose() {
-
     super.dispose();
     listgst.clear();
   }
@@ -47,11 +46,14 @@ class _InformationPageState extends State<InformationPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          
           children: [
             Padding(
-              padding:  EdgeInsets.only(top: MediaQuery.of(context).size.height *0.05),
-              child: Text("Grafica de Ingresos", style: Theme.of(context).textTheme.headlineMedium,),
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.05),
+              child: Text(
+                "Grafica de Ingresos",
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
             ),
             StreamBuilder(
               stream: streamBuilderGastos,
@@ -108,7 +110,7 @@ class _InformationPageState extends State<InformationPage> {
                             height: MediaQuery.of(context).size.height * 0.5,
                             width: MediaQuery.of(context).size.width,
                             child: GridView.builder(
-                               shrinkWrap: true,
+                              shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(

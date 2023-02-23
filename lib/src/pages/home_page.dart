@@ -1,14 +1,14 @@
+import '../Widgets/BottomMenu/bottom_menu_widget.dart';
+import '../Widgets/utils/dialog_ulit.dart';
+import '../services/auth.services.dart';
+import '../../Core/Colors/Hex_Color.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gastos_foraneo/src/Providers/main_provider.dart';
 import 'package:gastos_foraneo/src/models/user_expenses_model.dart';
 import 'package:provider/provider.dart';
-
-import '../Widgets/BottomMenu/bottom_menu_widget.dart';
-import '../Widgets/utils/dialog_ulit.dart';
-import '../services/auth.services.dart';
-import '../../Core/Colors/Hex_Color.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,14 +18,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isVisible = true;
+
   TextEditingController controllerTextLimp = TextEditingController();
   TextEditingController controllerTextComi = TextEditingController();
   TextEditingController controllerTextEstu = TextEditingController();
   TextEditingController controllerTextTota = TextEditingController();
   TextEditingController controllerTextTrasn = TextEditingController();
   TextEditingController controllerTextVario = TextEditingController();
-
-  bool isVisible = true;
 
   AuthServices auth = AuthServices();
   PageController _controller = PageController();
@@ -42,6 +42,8 @@ class _HomePageState extends State<HomePage> {
       totalAmount: 0,
       transportAmount: 0,
       variousAmount: 0);
+
+
   @override
   void initState() {
     super.initState();
@@ -56,6 +58,7 @@ class _HomePageState extends State<HomePage> {
         .doc(mainProvider.token)
         .collection("expenses");
     _editParamGastos(String type, String newValue) {
+      
       UsuarioGastos gst = UsuarioGastos(
           cleaningAmount: 0,
           foodAmount: 0,
@@ -189,9 +192,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text("Pagina Principal"),
-      // ),
+
       body: SingleChildScrollView(
           child: Column(
         children: [
@@ -381,13 +382,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _pageItem(String name, int position) {
+
     var _alignment;
+
     final selected = TextStyle(
       fontSize: 40.0,
       fontWeight: FontWeight.normal,
       //fontWeight: FontWeight.bold,
       color: Color.fromARGB(255, 15, 14, 40).withOpacity(0.7),
     );
+
     final unselected = TextStyle(
       fontSize: 40.0,
       fontWeight: FontWeight.normal,
@@ -409,6 +413,7 @@ class _HomePageState extends State<HomePage> {
         style: position == currentPage ? selected : unselected,
       ),
     );
+
   }
 }
 

@@ -437,7 +437,7 @@ class _MyFormWidgetState extends State<MyFormWidget> {
         children: [
           ElevatedButton(
             onPressed: _resetForm,
-            child: Text('Reset'),
+            child: Text('Valores reseteados exitosamentes '),
           ),
         ],
       ),

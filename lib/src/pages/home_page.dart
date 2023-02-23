@@ -349,7 +349,7 @@ class _HomePageState extends State<HomePage> {
                             tipodepago = "fondos";
                             _alertDialog(tipodepago, controllerTextTota);
                           },
-                          child: Text("Agregar Fondos")),
+                          child: Text("Agregar Fondos ")),
                     ],
                   );
                 }).toList());
@@ -386,6 +386,34 @@ class _HomePageState extends State<HomePage> {
       child: Text(
         name,
         style: position == currentPage ? selected : unselected,
+      ),
+    );
+  }
+}
+
+class MyFormWidget extends StatefulWidget {
+  @override
+  _MyFormWidgetState createState() => _MyFormWidgetState();
+}
+
+class _MyFormWidgetState extends State<MyFormWidget> {
+  final _formKey = GlobalKey<FormState>();
+
+  void _resetForm() {
+    _formKey.currentState?.reset();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          ElevatedButton(
+            onPressed: _resetForm,
+            child: Text('Reset'),
+          ),
+        ],
       ),
     );
   }

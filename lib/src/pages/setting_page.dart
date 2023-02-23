@@ -51,10 +51,8 @@ class _SettingPageState extends State<SettingPage> {
                       Container(
                         height:
                             MediaQuery.of(context).size.height.round() * 0.08,
+                        width: MediaQuery.of(context).size.width.round() * 0.90,
                         decoration: BoxDecoration(
-                            border: Border.all(
-                              color: HexColor("#4b4293"),
-                            ),
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                             gradient: LinearGradient(
                               begin: Alignment.topLeft,
@@ -85,10 +83,8 @@ class _SettingPageState extends State<SettingPage> {
                       Container(
                         height:
                             MediaQuery.of(context).size.height.round() * 0.08,
+                        width: MediaQuery.of(context).size.width.round() * 0.9,
                         decoration: BoxDecoration(
-                            border: Border.all(
-                              color: HexColor("#4b4293"),
-                            ),
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                             gradient: LinearGradient(
                               begin: Alignment.topLeft,
@@ -120,9 +116,6 @@ class _SettingPageState extends State<SettingPage> {
                         height:
                             MediaQuery.of(context).size.height.round() * 0.08,
                         decoration: BoxDecoration(
-                            border: Border.all(
-                              color: HexColor("#4b4293"),
-                            ),
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                             gradient: LinearGradient(
                               begin: Alignment.topLeft,

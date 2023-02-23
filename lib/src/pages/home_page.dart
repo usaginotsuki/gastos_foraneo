@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../Widgets/BottomMenu/bottom_menu_widget.dart';
 import '../Widgets/utils/dialog_ulit.dart';
 import '../services/auth.services.dart';
+import '../../Core/Colors/Hex_Color.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -170,30 +171,48 @@ class _HomePageState extends State<HomePage> {
           },
           controller: _controller,
           children: <Widget>[
-            _pageItem("Enero", 0),
-            _pageItem("Febrero", 1),
-            _pageItem("Marzo", 2),
-            _pageItem("Abril", 3),
-            _pageItem("Mayo", 4),
-            _pageItem("Junio", 5),
-            _pageItem("Julio", 6),
-            _pageItem("Augosto", 7),
-            _pageItem("Septiembre", 8),
-            _pageItem("Octubre", 9),
-            _pageItem("Noviembre", 10),
-            _pageItem("Diciembre", 11),
+            _pageItem("------- Enero -------", 0),
+            _pageItem("------- Febrero -------", 1),
+            _pageItem("------- Marzo -------", 2),
+            _pageItem("------- Abril -------", 3),
+            _pageItem("------- Mayo -------", 4),
+            _pageItem("------- Junio -------", 5),
+            _pageItem("------- Julio -------", 6),
+            _pageItem("------- Augosto -------", 7),
+            _pageItem("----- Septiembre -----", 8),
+            _pageItem("------- Octubre -------", 9),
+            _pageItem("------ Noviembre ------", 10),
+            _pageItem("------ Diciembre ------", 11),
           ],
         ),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Pagina Principal"),
-      ),
+      // appBar: AppBar(
+      //   title: const Text("Pagina Principal"),
+      // ),
       body: SingleChildScrollView(
           child: Column(
         children: [
+          const Padding(padding: EdgeInsets.only(top: 50.0)),
+          Container(
+              height: MediaQuery.of(context).size.height.round() * 0.1,
+              width: MediaQuery.of(context).size.width.round() * 0.97,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    stops: const [0.1, 0.4, 0.7, 0.9],
+                    colors: [
+                      HexColor("#4b4293").withOpacity(0.4),
+                      HexColor("#4b4293").withOpacity(0.4),
+                      HexColor("#08418e").withOpacity(0.4),
+                      HexColor("#08418e").withOpacity(0.4)
+                    ],
+                  )),
+              child: Image.asset('assets/gasto.png')),
           _selector(),
           Visibility(
             visible: isVisible,
@@ -247,10 +266,11 @@ class _HomePageState extends State<HomePage> {
                             gasto.totalAmount.toString(),
                             style: (total > gasto.totalAmount)
                                 ? TextStyle(
-                                    fontSize: 50, color: Color(0xffF02E65))
+                                    fontSize: 50,
+                                    color: Color.fromARGB(244, 203, 28, 89))
                                 : TextStyle(
                                     fontSize: 50,
-                                    color: Color.fromARGB(255, 46, 240, 127)),
+                                    color: Color.fromARGB(145, 1, 182, 122)),
                           ),
                           Text(
                             "Fondos",
@@ -363,14 +383,15 @@ class _HomePageState extends State<HomePage> {
   Widget _pageItem(String name, int position) {
     var _alignment;
     final selected = TextStyle(
-      fontSize: 20.0,
-      fontWeight: FontWeight.bold,
-      color: Colors.blueGrey,
+      fontSize: 40.0,
+      fontWeight: FontWeight.normal,
+      //fontWeight: FontWeight.bold,
+      color: Color.fromARGB(255, 15, 14, 40).withOpacity(0.7),
     );
     final unselected = TextStyle(
-      fontSize: 20.0,
+      fontSize: 40.0,
       fontWeight: FontWeight.normal,
-      color: Colors.blueGrey.withOpacity(0.4),
+      color: Color.fromARGB(255, 15, 14, 40).withOpacity(0.7),
     );
 
     if (position == currentPage) {

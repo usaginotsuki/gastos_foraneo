@@ -115,6 +115,7 @@ class _SettingPageState extends State<SettingPage> {
                       Container(
                         height:
                             MediaQuery.of(context).size.height.round() * 0.08,
+                        width: MediaQuery.of(context).size.width.round() * 0.90,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                             gradient: LinearGradient(

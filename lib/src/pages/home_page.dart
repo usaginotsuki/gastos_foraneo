@@ -43,7 +43,6 @@ class _HomePageState extends State<HomePage> {
       transportAmount: 0,
       variousAmount: 0);
 
-
   @override
   void initState() {
     super.initState();
@@ -58,7 +57,6 @@ class _HomePageState extends State<HomePage> {
         .doc(mainProvider.token)
         .collection("expenses");
     _editParamGastos(String type, String newValue) {
-      
       UsuarioGastos gst = UsuarioGastos(
           cleaningAmount: 0,
           foodAmount: 0,
@@ -192,7 +190,6 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
-
       body: SingleChildScrollView(
           child: Column(
         children: [
@@ -214,6 +211,12 @@ class _HomePageState extends State<HomePage> {
                     ],
                   )),
               child: Image.asset('assets/gasto.png')),
+          OutlinedButton(
+              onPressed: () {
+                tipodepago = "fondos";
+                _alertDialog(tipodepago, controllerTextTota);
+              },
+              child: Text("Agregar Fondos ")),
           _selector(),
           Visibility(
             visible: isVisible,
@@ -365,12 +368,6 @@ class _HomePageState extends State<HomePage> {
                           )
                         ],
                       ),
-                      OutlinedButton(
-                          onPressed: () {
-                            tipodepago = "fondos";
-                            _alertDialog(tipodepago, controllerTextTota);
-                          },
-                          child: Text("Agregar Fondos ")),
                     ],
                   );
                 }).toList());
@@ -382,7 +379,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _pageItem(String name, int position) {
-
     var _alignment;
 
     final selected = TextStyle(
@@ -413,7 +409,6 @@ class _HomePageState extends State<HomePage> {
         style: position == currentPage ? selected : unselected,
       ),
     );
-
   }
 }
 

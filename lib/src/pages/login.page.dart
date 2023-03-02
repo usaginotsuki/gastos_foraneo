@@ -13,6 +13,7 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+bool _obscureText = true;
 class _LoginPageState extends State<LoginPage> {
   //personalizacion colores
   Color backgroundColor = const Color(0xFF1F1A30);
@@ -382,11 +383,12 @@ emailSignIn(context) {
                       const Padding(padding: EdgeInsets.only(top: 16.0)),
                       TextFormField(
                         controller: password,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.password),
-                          labelText: 'Contraseña',
-                        ),
+                        obscureText: _obscureText,
                         onChanged: (value) {},
+                        decoration: InputDecoration(
+                            icon: Icon(Icons.password),
+                            labelText: 'Contraseña',
+                          ),
                         // The validator receives the text that the user has entered.
                         validator: (value) {
                           if (value == null || value.isEmpty) {

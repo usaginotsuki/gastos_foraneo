@@ -411,31 +411,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-class MyFormWidget extends StatefulWidget {
-  @override
-  _MyFormWidgetState createState() => _MyFormWidgetState();
-}
-
-class _MyFormWidgetState extends State<MyFormWidget> {
-  final _formKey = GlobalKey<FormState>();
-
-  void _resetForm() {
-    _formKey.currentState?.reset();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          ElevatedButton(
-            onPressed: _resetForm,
-            child: Text('Valores reseteados exitosamentes '),
-          ),
-        ],
-      ),
-    );
-  }
-}

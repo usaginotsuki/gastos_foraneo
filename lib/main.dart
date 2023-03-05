@@ -5,7 +5,6 @@ import 'package:gastos_foraneo/src/Providers/main_provider.dart';
 import 'package:gastos_foraneo/src/Widgets/Common/Themes/color_generator.dart';
 import 'package:gastos_foraneo/src/pages/login.page.dart';
 import 'package:provider/provider.dart';
-//import 'Core/Colors/Hex_Color.dart';
 import 'firebase_options.dart';
 
 void main() async {

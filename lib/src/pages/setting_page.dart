@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../Widgets/utils/dialog_ulit.dart';
 import '../Widgets/BottomMenu/bottom_menu_widget.dart';
 import '../services/auth.services.dart';
+import '../../Core/Colors/Hex_Color.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -26,9 +27,6 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     final mainProvider = Provider.of<MainProvider>(context, listen: false);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Perfil de usuario"),
-      ),
       body: SingleChildScrollView(
         child: StreamBuilder(
             stream: cliente
@@ -47,45 +45,105 @@ class _SettingPageState extends State<SettingPage> {
                   child: Card(
                       child: Column(
                     children: [
-                      ListTile(
-                        leading: Icon(Icons.email),
-                        title: Text(
-                          usuario.correo,
-                          style: Theme.of(context).textTheme.headlineSmall,
+                      const Padding(padding: EdgeInsets.only(top: 40.0)),
+                      Image.asset('assets/usuario3.png'),
+                      const Padding(padding: EdgeInsets.only(top: 20.0)),
+                      Container(
+                        height:
+                            MediaQuery.of(context).size.height.round() * 0.08,
+                        width: MediaQuery.of(context).size.width.round() * 0.90,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              stops: const [0.1, 0.4, 0.7, 0.9],
+                              colors: [
+                                HexColor("#4b4293").withOpacity(0.1),
+                                HexColor("#4b4293").withOpacity(0.1),
+                                HexColor("#08418e").withOpacity(0.1),
+                                HexColor("#08418e").withOpacity(0.1)
+                              ],
+                            )),
+                        child: ListTile(
+                          leading: Icon(Icons.email),
+                          title: Text(
+                            usuario.correo,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          trailing: IconButton(
+                              onPressed: () {
+                                type = "email";
+                                _alertDialog(type, controllerTextEmail);
+                              },
+                              icon: Icon(Icons.edit_outlined)),
                         ),
-                        trailing: IconButton(
-                            onPressed: () {
-                              type = "email";
-                              _alertDialog(type, controllerTextEmail);
-                            },
-                            icon: Icon(Icons.edit_outlined)),
                       ),
-                      ListTile(
-                        leading: Icon(Icons.person),
-                        title: Text(
-                          usuario.name,
-                          style: Theme.of(context).textTheme.headlineSmall,
+                      const Padding(padding: EdgeInsets.only(top: 20.0)),
+                      Container(
+                        height:
+                            MediaQuery.of(context).size.height.round() * 0.08,
+                        width: MediaQuery.of(context).size.width.round() * 0.9,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              stops: const [0.1, 0.4, 0.7, 0.9],
+                              colors: [
+                                HexColor("#4b4293").withOpacity(0.1),
+                                HexColor("#4b4293").withOpacity(0.1),
+                                HexColor("#08418e").withOpacity(0.1),
+                                HexColor("#08418e").withOpacity(0.1)
+                              ],
+                            )),
+                        child: ListTile(
+                          leading: Icon(Icons.person),
+                          title: Text(
+                            usuario.name,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          trailing: IconButton(
+                              onPressed: () {
+                                type = "nombre";
+                                _alertDialog(type, controllerTextName);
+                              },
+                              icon: Icon(Icons.edit_outlined)),
                         ),
-                        trailing: IconButton(
-                            onPressed: () {
-                              type = "nombre";
-                              _alertDialog(type, controllerTextName);
-                            },
-                            icon: Icon(Icons.edit_outlined)),
                       ),
-                      ListTile(
-                        leading: Icon(Icons.phone),
-                        title: Text(
-                          usuario.phone,
-                          style: Theme.of(context).textTheme.headlineSmall,
+                      const Padding(padding: EdgeInsets.only(top: 20.0)),
+                      Container(
+                        height:
+                            MediaQuery.of(context).size.height.round() * 0.08,
+                        width: MediaQuery.of(context).size.width.round() * 0.90,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              stops: const [0.1, 0.4, 0.7, 0.9],
+                              colors: [
+                                HexColor("#4b4293").withOpacity(0.1),
+                                HexColor("#4b4293").withOpacity(0.1),
+                                HexColor("#08418e").withOpacity(0.1),
+                                HexColor("#08418e").withOpacity(0.1)
+                              ],
+                            )),
+                        child: ListTile(
+                          leading: Icon(Icons.phone),
+                          title: Text(
+                            usuario.phone,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          trailing: IconButton(
+                              onPressed: () {
+                                type = "celular";
+                                _alertDialog(type, controllerTextPhone);
+                              },
+                              icon: Icon(Icons.edit_outlined)),
                         ),
-                        trailing: IconButton(
-                            onPressed: () {
-                              type = "celular";
-                              _alertDialog(type, controllerTextPhone);
-                            },
-                            icon: Icon(Icons.edit_outlined)),
                       ),
+                      const Padding(padding: EdgeInsets.only(top: 40.0)),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Align(

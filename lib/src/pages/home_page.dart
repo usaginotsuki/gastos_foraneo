@@ -1,13 +1,14 @@
+import '../Widgets/BottomMenu/bottom_menu_widget.dart';
+import '../Widgets/utils/dialog_ulit.dart';
+import '../services/auth.services.dart';
+import '../../Core/Colors/Hex_Color.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gastos_foraneo/src/Providers/main_provider.dart';
 import 'package:gastos_foraneo/src/models/user_expenses_model.dart';
 import 'package:provider/provider.dart';
-
-import '../Widgets/BottomMenu/bottom_menu_widget.dart';
-import '../Widgets/utils/dialog_ulit.dart';
-import '../services/auth.services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,19 +18,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isVisible = true;
+
   TextEditingController controllerTextLimp = TextEditingController();
   TextEditingController controllerTextComi = TextEditingController();
   TextEditingController controllerTextEstu = TextEditingController();
   TextEditingController controllerTextTota = TextEditingController();
   TextEditingController controllerTextTrasn = TextEditingController();
   TextEditingController controllerTextVario = TextEditingController();
-
+  num total = 0;
   AuthServices auth = AuthServices();
   PageController _controller = PageController();
   int currentPage = DateTime.now().month - 1;
   String tipodepago = "";
   String yeardata = "0";
-  bool? hasDataf;
+  bool hasDataf = true;
   FirebaseFirestore dataUserFuture = FirebaseFirestore.instance;
   UsuarioGastos usrgst = UsuarioGastos(
       cleaningAmount: 0,
@@ -39,6 +42,7 @@ class _HomePageState extends State<HomePage> {
       totalAmount: 0,
       transportAmount: 0,
       variousAmount: 0);
+
   @override
   void initState() {
     super.initState();
@@ -52,8 +56,8 @@ class _HomePageState extends State<HomePage> {
         .collection('usuarios')
         .doc(mainProvider.token)
         .collection("expenses");
+
     _editParamGastos(String type, String newValue) {
-      final mainProvider = Provider.of<MainProvider>(context, listen: false);
       UsuarioGastos gst = UsuarioGastos(
           cleaningAmount: 0,
           foodAmount: 0,
@@ -75,80 +79,68 @@ class _HomePageState extends State<HomePage> {
                           : (type == "fondos")
                               ? gst.totalAmount = num.parse(newValue)
                               : gst.totalAmount;
-      clientegastos
+      FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(mainProvider.token)
+          .collection("expenses")
           .doc("exp" + mainProvider.token + yeardata)
           .update((type == "limpieza")
               ? {
-                  'user_cleaningAmount': num.parse(newValue),
+                  'user_cleaningAmount': gst.cleaningAmount,
                 }
               : (type == "comida")
                   ? {
-                      'user_foodAmount': num.parse(newValue),
+                      'user_foodAmount': gst.foodAmount,
                     }
                   : (type == "estudio")
                       ? {
-                          'user_studyAmount': num.parse(newValue),
+                          'user_studyAmount': gst.studyAmount,
                         }
                       : (type == "transporte")
                           ? {
-                              'user_transportAmount': num.parse(newValue),
+                              'user_transportAmount': gst.transportAmount,
                             }
                           : (type == "varios")
                               ? {
-                                  'user_variousAmount': num.parse(newValue),
+                                  'user_variousAmount': gst.variousAmount,
                                 }
                               : (type == "fondos")
                                   ? {
-                                      'user_totalAmount': num.parse(newValue),
+                                      'user_totalAmount': gst.totalAmount,
                                     }
                                   : {});
     }
 
-    TextEditingController _controllers = TextEditingController();
-
     _alertDialog(String type, TextEditingController controller) {
       DialogUtils.showAlertWithCustomActions(context, "", [
-        (type != "reporte")
-            ? TextFormField(
-                decoration:
-                    InputDecoration(labelText: "Agrege un nuevo monto a $type"),
-                controller: _controllers,
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(
-                      RegExp(r'^[1-9][\.\d]*(,\d+)?$')),
-                ],
-                onTap: () {
-                  _controllers.clear();
-                },
-                onFieldSubmitted: (newValue) {
-                  setState(() {
-                    if (type != "reporte") {
-                      _editParamGastos(type, newValue);
-                      Navigator.pop(context, 'OK');
-                    }
-                  });
-                },
-              )
-            : Row(
-                children: [
-                  OutlinedButton(
-                      onPressed: () {
-                        auth.userNonthReport(
-                            mainProvider.token, yeardata, usrgst);
-                        Navigator.pop(context, 'OK');
-                      },
-                      child: Text("Enviar")),
-                  OutlinedButton(
-                      onPressed: () {
-                        Navigator.pop(context, 'OK');
-                        // print("gasos " + controllerTextEstu.toString());
-                      },
-                      child: Text("Cancelar")),
-                ],
-              )
+        TextFormField(
+          decoration:
+              InputDecoration(labelText: "Agrege un nuevo monto a $type"),
+          controller: controller,
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.allow(RegExp(r'^[1-9][\.\d]*(,\d+)?$')),
+          ],
+          onTap: () {
+            controller.clear();
+          },
+          onFieldSubmitted: (newValue) {
+            if (type == "fondos" && num.parse(newValue) < total) {
+              showSnackbarWithMessage(context,
+                  "Parece que has sobrepasado el total de tu valor total");
+              Navigator.pop(context, 'OK');
+            } else {
+              setState(() {
+                _editParamGastos(type, newValue);
+                Navigator.pop(context, 'OK');
+              });
+            }
+          },
+        )
       ]);
     }
+
+    TextEditingController _controllers = TextEditingController();
 
     var streamBuilderGastos = clientegastos
         .where("user_idexp", isEqualTo: "exp" + mainProvider.token + yeardata)
@@ -169,48 +161,64 @@ class _HomePageState extends State<HomePage> {
           },
           controller: _controller,
           children: <Widget>[
-            _pageItem("Enero", 0),
-            _pageItem("Febrero", 1),
-            _pageItem("Marzo", 2),
-            _pageItem("Abril", 3),
-            _pageItem("Mayo", 4),
-            _pageItem("Junio", 5),
-            _pageItem("Julio", 6),
-            _pageItem("Agosto", 7),
-            _pageItem("Septiembre", 8),
-            _pageItem("Octubre", 9),
-            _pageItem("Noviembre", 10),
-            _pageItem("Diciembre", 11),
+            _pageItem("------- Enero -------", 0),
+            _pageItem("------- Febrero -------", 1),
+            _pageItem("------- Marzo -------", 2),
+            _pageItem("------- Abril -------", 3),
+            _pageItem("------- Mayo -------", 4),
+            _pageItem("------- Junio -------", 5),
+            _pageItem("------- Julio -------", 6),
+            _pageItem("------- Augosto -------", 7),
+            _pageItem("----- Septiembre -----", 8),
+            _pageItem("------- Octubre -------", 9),
+            _pageItem("------ Noviembre ------", 10),
+            _pageItem("------ Diciembre ------", 11),
           ],
         ),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Pagina Principal"),
-      ),
       body: SingleChildScrollView(
           child: Column(
         children: [
+          const Padding(padding: EdgeInsets.only(top: 50.0)),
+          Container(
+              height: MediaQuery.of(context).size.height.round() * 0.1,
+              width: MediaQuery.of(context).size.width.round() * 0.97,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    stops: const [0.1, 0.4, 0.7, 0.9],
+                    colors: [
+                      HexColor("#4b4293").withOpacity(0.4),
+                      HexColor("#4b4293").withOpacity(0.4),
+                      HexColor("#08418e").withOpacity(0.4),
+                      HexColor("#08418e").withOpacity(0.4)
+                    ],
+                  )),
+              child: Image.asset('assets/gasto.png')),
           _selector(),
-          OutlinedButton(
-              onPressed: () {
-                tipodepago = "reporte";
-                _alertDialog(tipodepago, controllerTextTota);
-              },
-              child: Text("Generar un Nuevo Reporte")),
           StreamBuilder(
               stream: streamBuilderGastos,
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.data?.docs.length == 0) {
+                  isVisible = true;
+                } else if (snapshot.data?.docs.length != 0) {
+                  isVisible = false;
+                }
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
                     return Center(child: CircularProgressIndicator());
+                  case ConnectionState.active:
+
                   case ConnectionState.none:
                   default:
-                    if (snapshot.hasData) {
+                    if (snapshot.data?.docs.length == 0) {
                       hasDataf = false;
-                    } else if (snapshot.hasError) {
+                    } else {
                       hasDataf = true;
                     }
                 }
@@ -222,7 +230,7 @@ class _HomePageState extends State<HomePage> {
 
                   usrgst = gasto;
 
-                  num total = gasto.cleaningAmount +
+                  total = gasto.cleaningAmount +
                       gasto.foodAmount +
                       gasto.studyAmount +
                       gasto.transportAmount +
@@ -232,14 +240,37 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Column(
                         children: [
-                          Text(
-                            gasto.totalAmount.toString(),
-                            style: (total > gasto.totalAmount)
-                                ? TextStyle(
-                                    fontSize: 50, color: Color(0xffF02E65))
-                                : TextStyle(
-                                    fontSize: 50,
-                                    color: Color.fromARGB(255, 46, 240, 127)),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.35),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  gasto.totalAmount.toString(),
+                                  style: (total > gasto.totalAmount)
+                                      ? TextStyle(
+                                          fontSize: 50,
+                                          color:
+                                              Color.fromARGB(244, 203, 28, 89))
+                                      : TextStyle(
+                                          fontSize: 50,
+                                          color:
+                                              Color.fromARGB(145, 1, 182, 122)),
+                                ),
+                                CircleAvatar(
+                                  backgroundColor:
+                                      Color.fromARGB(145, 1, 182, 122),
+                                  child: OutlinedButton(
+                                      onPressed: () {
+                                        tipodepago = "fondos";
+                                        _alertDialog(
+                                            tipodepago, controllerTextTota);
+                                      },
+                                      child: Text("+")),
+                                ),
+                              ],
+                            ),
                           ),
                           Text(
                             "Fondos",
@@ -333,12 +364,6 @@ class _HomePageState extends State<HomePage> {
                           )
                         ],
                       ),
-                      OutlinedButton(
-                          onPressed: () {
-                            tipodepago = "fondos";
-                            _alertDialog(tipodepago, controllerTextTota);
-                          },
-                          child: Text("Agregar Fondos")),
                     ],
                   );
                 }).toList());
@@ -351,15 +376,18 @@ class _HomePageState extends State<HomePage> {
 
   Widget _pageItem(String name, int position) {
     var _alignment;
+
     final selected = TextStyle(
-      fontSize: 20.0,
-      fontWeight: FontWeight.bold,
-      color: Colors.blueGrey,
-    );
-    final unselected = TextStyle(
-      fontSize: 20.0,
+      fontSize: 40.0,
       fontWeight: FontWeight.normal,
-      color: Colors.blueGrey.withOpacity(0.4),
+      //fontWeight: FontWeight.bold,
+      color: Color.fromARGB(255, 15, 14, 40).withOpacity(0.7),
+    );
+
+    final unselected = TextStyle(
+      fontSize: 40.0,
+      fontWeight: FontWeight.normal,
+      color: Color.fromARGB(255, 15, 14, 40).withOpacity(0.7),
     );
 
     if (position == currentPage) {

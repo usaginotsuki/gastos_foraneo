@@ -69,7 +69,7 @@ class _SettingPageState extends State<SettingPage> {
                           leading: Icon(Icons.email),
                           title: Text(
                             usuario.correo,
-                            style: Theme.of(context).textTheme.headline6,
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                           trailing: IconButton(
                               onPressed: () {
@@ -101,7 +101,7 @@ class _SettingPageState extends State<SettingPage> {
                           leading: Icon(Icons.person),
                           title: Text(
                             usuario.name,
-                            style: Theme.of(context).textTheme.headline6,
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                           trailing: IconButton(
                               onPressed: () {
@@ -133,7 +133,7 @@ class _SettingPageState extends State<SettingPage> {
                           leading: Icon(Icons.phone),
                           title: Text(
                             usuario.phone,
-                            style: Theme.of(context).textTheme.headline6,
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                           trailing: IconButton(
                               onPressed: () {

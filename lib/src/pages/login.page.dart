@@ -13,12 +13,15 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+bool _obscureText = true;
+
 class _LoginPageState extends State<LoginPage> {
   //personalizacion colores
   Color backgroundColor = const Color(0xFF1F1A30);
   Color enabled = const Color.fromARGB(255, 63, 56, 89);
   Color enabledtxt = Colors.white;
   Color deaible = Colors.grey;
+
   //
   AuthServices auth = AuthServices();
   @override
@@ -206,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                                             )))),
                                 //Agregas la funcion
                                 onPressed: () {
-                                  emailSignIn(context);
+                                  emailSignIn();
                                 },
                                 icon: const Icon(Icons.login),
                                 label: const Text("Ingresar con Correo ")))),
@@ -218,6 +221,108 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  emailSignIn() {
+    final formKey = GlobalKey<FormState>();
+    TextEditingController email = TextEditingController();
+    TextEditingController password = TextEditingController();
+
+    AuthServices auth = AuthServices();
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).dividerColor,
+                borderRadius: BorderRadius.circular(64.0),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    offset: const Offset(13.0, 13.0),
+                    color: Color.fromARGB(255, 225, 220, 229).withOpacity(0.3),
+                    spreadRadius: 3.0,
+                    blurRadius: 20.0,
+                  ),
+                  const BoxShadow(
+                    offset: Offset(-12.0, -12.0),
+                    color: Color.fromARGB(255, 237, 238, 245),
+                    spreadRadius: 3.0,
+                    blurRadius: 20.0,
+                  ),
+                ],
+              ),
+              child: Text(
+                'Login',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        const Text('Ingresa tu correo y contraseña'),
+                        TextFormField(
+                          controller: email,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.email),
+                            labelText: 'Correo electrónico',
+                          ),
+                          onChanged: (value) {},
+                          // The validator receives the text that the user has entered.
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor ingresa tu correo';
+                            }
+                            return null;
+                          },
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 16.0)),
+                        TextFormField(
+                          controller: password,
+                          obscureText: _obscureText,
+                          decoration: InputDecoration(
+                            icon: Icon(Icons.password),
+                            labelText: 'Contraseña',
+                          ),
+                          onChanged: (value) {},
+
+                          // The validator receives the text that the user has entered.
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor ingresa tu correo';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ))
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancelar'),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    dev.log("Validado");
+                    auth.loginWithEmail(
+                        email.text.trim(), password.text.trim(), context);
+                  }
+                },
+                child: const Text('Ok'),
+              ),
+            ],
+          );
+        });
   }
 }
 
@@ -311,106 +416,6 @@ emailSignUp(context) {
                 if (formKey.currentState!.validate()) {
                   dev.log("Validado");
                   auth.signUpWithEmail(
-                      email.text.trim(), password.text.trim(), context);
-                }
-              },
-              child: const Text('Ok'),
-            ),
-          ],
-        );
-      });
-}
-
-emailSignIn(context) {
-  final formKey = GlobalKey<FormState>();
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
-
-  AuthServices auth = AuthServices();
-  return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).dividerColor,
-              borderRadius: BorderRadius.circular(64.0),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  offset: const Offset(13.0, 13.0),
-                  color: Color.fromARGB(255, 225, 220, 229).withOpacity(0.3),
-                  spreadRadius: 3.0,
-                  blurRadius: 20.0,
-                ),
-                const BoxShadow(
-                  offset: Offset(-12.0, -12.0),
-                  color: Color.fromARGB(255, 237, 238, 245),
-                  spreadRadius: 3.0,
-                  blurRadius: 20.0,
-                ),
-              ],
-            ),
-            child: Text(
-              'Login',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Theme.of(context).primaryColor),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      const Text('Ingresa tu correo y contraseña'),
-                      TextFormField(
-                        controller: email,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.email),
-                          labelText: 'Correo electrónico',
-                        ),
-                        onChanged: (value) {},
-                        // The validator receives the text that the user has entered.
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor ingresa tu correo';
-                          }
-                          return null;
-                        },
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 16.0)),
-                      TextFormField(
-                        controller: password,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.password),
-                          labelText: 'Contraseña',
-                        ),
-                        onChanged: (value) {},
-                        // The validator receives the text that the user has entered.
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor ingresa tu correo';
-                          }
-                          return null;
-                        },
-                      ),
-                    ],
-                  ))
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancelar'),
-            ),
-            TextButton(
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  dev.log("Validado");
-                  auth.loginWithEmail(
                       email.text.trim(), password.text.trim(), context);
                 }
               },

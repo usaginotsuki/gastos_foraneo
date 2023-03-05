@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   TextEditingController controllerTextTota = TextEditingController();
   TextEditingController controllerTextTrasn = TextEditingController();
   TextEditingController controllerTextVario = TextEditingController();
-
+  num total = 0;
   AuthServices auth = AuthServices();
   PageController _controller = PageController();
   int currentPage = DateTime.now().month - 1;
@@ -43,7 +43,6 @@ class _HomePageState extends State<HomePage> {
       transportAmount: 0,
       variousAmount: 0);
 
-
   @override
   void initState() {
     super.initState();
@@ -58,7 +57,11 @@ class _HomePageState extends State<HomePage> {
         .doc(mainProvider.token)
         .collection("expenses");
     _editParamGastos(String type, String newValue) {
-      
+      if (type == "fondos" && num.parse(newValue) > total) {
+        showSnackbarWithMessage(
+            context, "Parece que has sobrepasado el total de costos");
+      }
+
       UsuarioGastos gst = UsuarioGastos(
           cleaningAmount: 0,
           foodAmount: 0,
@@ -192,7 +195,6 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
-
       body: SingleChildScrollView(
           child: Column(
         children: [
@@ -253,7 +255,7 @@ class _HomePageState extends State<HomePage> {
 
                   usrgst = gasto;
 
-                  num total = gasto.cleaningAmount +
+                  total = gasto.cleaningAmount +
                       gasto.foodAmount +
                       gasto.studyAmount +
                       gasto.transportAmount +
@@ -382,7 +384,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _pageItem(String name, int position) {
-
     var _alignment;
 
     final selected = TextStyle(
@@ -413,7 +414,6 @@ class _HomePageState extends State<HomePage> {
         style: position == currentPage ? selected : unselected,
       ),
     );
-
   }
 }
 

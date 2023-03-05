@@ -1,5 +1,5 @@
-import 'package:charts_flutter/flutter.dart';
 
+import 'package:charts_flutter_new/flutter.dart';
 import 'package:flutter/material.dart';
 
 class PieGraphWidget extends StatefulWidget {
@@ -26,6 +26,7 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
 
     return PieChart(
       series,
+      
     );
   }
 }

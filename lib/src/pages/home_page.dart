@@ -56,12 +56,8 @@ class _HomePageState extends State<HomePage> {
         .collection('usuarios')
         .doc(mainProvider.token)
         .collection("expenses");
-    _editParamGastos(String type, String newValue) {
-      if (type == "fondos" && num.parse(newValue) > total) {
-        showSnackbarWithMessage(
-            context, "Parece que has sobrepasado el total de costos");
-      }
 
+    _editParamGastos(String type, String newValue) {
       UsuarioGastos gst = UsuarioGastos(
           cleaningAmount: 0,
           foodAmount: 0,
@@ -83,80 +79,68 @@ class _HomePageState extends State<HomePage> {
                           : (type == "fondos")
                               ? gst.totalAmount = num.parse(newValue)
                               : gst.totalAmount;
-      clientegastos
+      FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(mainProvider.token)
+          .collection("expenses")
           .doc("exp" + mainProvider.token + yeardata)
           .update((type == "limpieza")
               ? {
-                  'user_cleaningAmount': num.parse(newValue),
+                  'user_cleaningAmount': gst.cleaningAmount,
                 }
               : (type == "comida")
                   ? {
-                      'user_foodAmount': num.parse(newValue),
+                      'user_foodAmount': gst.foodAmount,
                     }
                   : (type == "estudio")
                       ? {
-                          'user_studyAmount': num.parse(newValue),
+                          'user_studyAmount': gst.studyAmount,
                         }
                       : (type == "transporte")
                           ? {
-                              'user_transportAmount': num.parse(newValue),
+                              'user_transportAmount': gst.transportAmount,
                             }
                           : (type == "varios")
                               ? {
-                                  'user_variousAmount': num.parse(newValue),
+                                  'user_variousAmount': gst.variousAmount,
                                 }
                               : (type == "fondos")
                                   ? {
-                                      'user_totalAmount': num.parse(newValue),
+                                      'user_totalAmount': gst.totalAmount,
                                     }
                                   : {});
     }
 
-    TextEditingController _controllers = TextEditingController();
-
     _alertDialog(String type, TextEditingController controller) {
       DialogUtils.showAlertWithCustomActions(context, "", [
-        (type != "reporte")
-            ? TextFormField(
-                decoration:
-                    InputDecoration(labelText: "Agrege un nuevo monto a $type"),
-                controller: _controllers,
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(
-                      RegExp(r'^[1-9][\.\d]*(,\d+)?$')),
-                ],
-                onTap: () {
-                  _controllers.clear();
-                },
-                onFieldSubmitted: (newValue) {
-                  setState(() {
-                    if (type != "reporte") {
-                      _editParamGastos(type, newValue);
-                      Navigator.pop(context, 'OK');
-                    }
-                  });
-                },
-              )
-            : Row(
-                children: [
-                  OutlinedButton(
-                      onPressed: () {
-                        auth.userNonthReport(
-                            mainProvider.token, yeardata, usrgst);
-                        Navigator.pop(context, 'OK');
-                      },
-                      child: Text("Enviar")),
-                  OutlinedButton(
-                      onPressed: () {
-                        Navigator.pop(context, 'OK');
-                        // print("gasos " + controllerTextEstu.toString());
-                      },
-                      child: Text("Cancelar")),
-                ],
-              )
+        TextFormField(
+          decoration:
+              InputDecoration(labelText: "Agrege un nuevo monto a $type"),
+          controller: controller,
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.allow(RegExp(r'^[1-9][\.\d]*(,\d+)?$')),
+          ],
+          onTap: () {
+            controller.clear();
+          },
+          onFieldSubmitted: (newValue) {
+            if (type == "fondos" && num.parse(newValue) < total) {
+              showSnackbarWithMessage(context,
+                  "Parece que has sobrepasado el total de tu valor total");
+              Navigator.pop(context, 'OK');
+            } else {
+              setState(() {
+                _editParamGastos(type, newValue);
+                Navigator.pop(context, 'OK');
+              });
+            }
+          },
+        )
       ]);
     }
+
+    TextEditingController _controllers = TextEditingController();
 
     var streamBuilderGastos = clientegastos
         .where("user_idexp", isEqualTo: "exp" + mainProvider.token + yeardata)
@@ -216,22 +200,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   )),
               child: Image.asset('assets/gasto.png')),
-          OutlinedButton(
-              onPressed: () {
-                tipodepago = "fondos";
-                _alertDialog(tipodepago, controllerTextTota);
-              },
-              child: Text("Agregar Fondos ")),
           _selector(),
-          Visibility(
-            visible: isVisible,
-            child: OutlinedButton(
-                onPressed: () {
-                  tipodepago = "reporte";
-                  _alertDialog(tipodepago, controllerTextTota);
-                },
-                child: Text("Generar un Nuevo Reporte")),
-          ),
           StreamBuilder(
               stream: streamBuilderGastos,
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -271,15 +240,37 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Column(
                         children: [
-                          Text(
-                            gasto.totalAmount.toString(),
-                            style: (total > gasto.totalAmount)
-                                ? TextStyle(
-                                    fontSize: 50,
-                                    color: Color.fromARGB(244, 203, 28, 89))
-                                : TextStyle(
-                                    fontSize: 50,
-                                    color: Color.fromARGB(145, 1, 182, 122)),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.35),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  gasto.totalAmount.toString(),
+                                  style: (total > gasto.totalAmount)
+                                      ? TextStyle(
+                                          fontSize: 50,
+                                          color:
+                                              Color.fromARGB(244, 203, 28, 89))
+                                      : TextStyle(
+                                          fontSize: 50,
+                                          color:
+                                              Color.fromARGB(145, 1, 182, 122)),
+                                ),
+                                CircleAvatar(
+                                  backgroundColor:
+                                      Color.fromARGB(145, 1, 182, 122),
+                                  child: OutlinedButton(
+                                      onPressed: () {
+                                        tipodepago = "fondos";
+                                        _alertDialog(
+                                            tipodepago, controllerTextTota);
+                                      },
+                                      child: Text("+")),
+                                ),
+                              ],
+                            ),
                           ),
                           Text(
                             "Fondos",

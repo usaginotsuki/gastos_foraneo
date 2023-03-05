@@ -49,6 +49,8 @@ dependencies:
   page_transition: ^2.0.9
   flutter_settings_screens: ^0.3.3-null-safety+2
   charts_flutter_new: ^0.12.0
+  email_validator: ^2.1.17
+  
 
 
 dev_dependencies:

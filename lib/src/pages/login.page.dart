@@ -1,5 +1,6 @@
 //write a login page in flutter
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:gastos_foraneo/src/services/auth.services.dart';
@@ -395,8 +396,10 @@ emailSignUp(context) {
                         // The validator receives the text that the user has entered.
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Por favor ingresa tu correo';
-                          }
+                            return 'Por favor ingresa tu correo'; 
+                          } else if(!EmailValidator.validate(value)){
+                            return 'Correo invalido';
+                          } 
                           return null;
                         },
                       ),

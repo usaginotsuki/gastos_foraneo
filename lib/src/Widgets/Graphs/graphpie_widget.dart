@@ -1,7 +1,9 @@
 
-import 'package:charts_flutter_new/flutter.dart';
-import 'package:flutter/material.dart';
+import 'dart:ffi';
 
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 class PieGraphWidget extends StatefulWidget {
   const PieGraphWidget({super.key, required this.incomeData});
   final List<double> incomeData;
@@ -11,22 +13,172 @@ class PieGraphWidget extends StatefulWidget {
 }
 
 class _PieGraphWidgetState extends State<PieGraphWidget> {
+   int touchedIndex = 0;
   @override
   Widget build(BuildContext context) {
-    final List<Series<double, num>> series = [
-      Series<double, num>(
-        id: 'Gastox',
-        domainFn: (value, index) => index!,
-        measureFn: (value, _) => value,
-        data: widget.incomeData,
-        strokeWidthPxFn: (_, __) => 4,
-        labelAccessorFn: (datum, index) => (index == 0) ? "Gastos: $datum" : "",
-      )
-    ];
+    return SizedBox.square(
+      dimension: MediaQuery.of(context).size.width *0.95 ,
+      child: PieChart(
+       PieChartData(
+           pieTouchData: PieTouchData(
+             touchCallback: (FlTouchEvent event, pieTouchResponse) {
+               setState(() {
+                 if (!event.isInterestedForInteractions ||
+                     pieTouchResponse == null ||
+                     pieTouchResponse.touchedSection == null) {
+                   touchedIndex = -1;
+                   return;
+                 }
+                 touchedIndex =
+                     pieTouchResponse.touchedSection!.touchedSectionIndex;
+               });
+             },
+           ),
+           borderData: FlBorderData(
+             show: false,
+           ),
+           sectionsSpace: 0,
+           centerSpaceRadius: 0,
+           sections: showingSections(),
+         ),
+      ),
+    );
+  }
+  List<PieChartSectionData> showingSections() {
+    return List.generate(5, (i) {
+      final isTouched = i == touchedIndex;
+      final fontSize = isTouched ? 15.0 : 12.0;
+      final radius = isTouched ? 185.0 : 180.0;
+      const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
 
-    return PieChart(
-      series,
-      
+      switch (i) {
+        
+        case 0:
+          return PieChartSectionData(
+            color: Theme.of(context).primaryColorDark,
+            value: widget.incomeData[0],
+            title: 'Limpieza:  ${widget.incomeData[1]} \$',
+            showTitle: isTouched,
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: shadows,
+            ),
+           
+            badgePositionPercentageOffset: .98,
+          );
+        case 1:
+          return PieChartSectionData(
+            color:Theme.of(context).primaryColorLight,
+            value: widget.incomeData[1],
+            title: 'Comida:  ${widget.incomeData[2]} \$',
+            radius: radius,
+             showTitle: isTouched,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: shadows,
+            ),
+          
+            badgePositionPercentageOffset: .98,
+          );
+        case 2:
+          return PieChartSectionData(
+            color:Theme.of(context).secondaryHeaderColor,
+            value: widget.incomeData[2],
+            title: 'Estudio:  ${widget.incomeData[3]} \$',
+            radius: radius,
+             showTitle: isTouched,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: shadows,
+            ),
+           
+            badgePositionPercentageOffset: .98,
+          );
+        case 3:
+        return PieChartSectionData(
+            color:Theme.of(context).primaryColor,
+            value: widget.incomeData[3],
+            title: 'Transporte:  ${widget.incomeData[4]} \$',
+            radius: radius,
+             showTitle: isTouched,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: shadows,
+            ),
+           
+            badgePositionPercentageOffset: .6,
+          
+          );
+          case 4: 
+          return PieChartSectionData(
+            color:Theme.of(context).unselectedWidgetColor,
+            value: widget.incomeData[4],
+            title: 'Varios  ${widget.incomeData[4]} \$',
+            radius: radius,
+             showTitle: isTouched,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: shadows,
+            ),
+           
+            badgePositionPercentageOffset: .98,
+          
+          );
+        default:
+          throw Exception('Oh no');
+      }
+    });
+  }
+}
+
+class _Badge extends StatelessWidget {
+  const _Badge(
+    this.svgAsset, {
+    required this.size,
+    required this.borderColor,
+  });
+  final String svgAsset;
+  final double size;
+  final Color borderColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: PieChart.defaultDuration,
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: borderColor,
+          width: 2,
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withOpacity(.5),
+            offset: const Offset(3, 3),
+            blurRadius: 3,
+          ),
+        ],
+      ),
+      padding: EdgeInsets.all(size * .15),
+      child: Center(
+        child: SvgPicture.asset(
+          svgAsset,
+        ),
+      ),
     );
   }
 }

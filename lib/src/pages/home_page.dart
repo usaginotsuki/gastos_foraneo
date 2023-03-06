@@ -255,12 +255,12 @@ class _HomePageState extends State<HomePage> {
                                               Color.fromARGB(244, 203, 28, 89))
                                       : TextStyle(
                                           fontSize: 50,
-                                          color:
-                                              Color.fromARGB(145, 1, 182, 122)),
+                                          color: HexColor("#02c39a")
+                                              .withOpacity(0.4)),
                                 ),
                                 CircleAvatar(
                                   backgroundColor:
-                                      Color.fromARGB(145, 1, 182, 122),
+                                      Color.fromARGB(145, 61, 127, 194),
                                   child: OutlinedButton(
                                       onPressed: () {
                                         tipodepago = "fondos";
@@ -288,7 +288,11 @@ class _HomePageState extends State<HomePage> {
                                       _alertDialog(
                                           tipodepago, controllerTextLimp);
                                     },
-                                    leading: Icon(Icons.wash),
+                                    leading: Icon(
+                                      Icons.wash,
+                                      color:
+                                          HexColor("#bdb2ff").withOpacity(0.6),
+                                    ),
                                     title: const Text("Limpieza"),
                                     trailing: Text(
                                         gasto.cleaningAmount.toString(),
@@ -304,7 +308,10 @@ class _HomePageState extends State<HomePage> {
                                       _alertDialog(
                                           tipodepago, controllerTextComi);
                                     },
-                                    leading: Icon(Icons.food_bank),
+                                    leading: Icon(
+                                      Icons.restaurant_menu,
+                                      color: HexColor("#ffc6ff"),
+                                    ),
                                     title: const Text("Comida"),
                                     trailing: Text(gasto.foodAmount.toString(),
                                         style: Theme.of(context)
@@ -319,7 +326,11 @@ class _HomePageState extends State<HomePage> {
                                       _alertDialog(
                                           tipodepago, controllerTextComi);
                                     },
-                                    leading: Icon(Icons.book),
+                                    leading: Icon(
+                                      Icons.book,
+                                      color:
+                                          HexColor("#64dfdf").withOpacity(0.6),
+                                    ),
                                     title: const Text("Estudios"),
                                     trailing: Text(gasto.studyAmount.toString(),
                                         style: Theme.of(context)
@@ -334,7 +345,11 @@ class _HomePageState extends State<HomePage> {
                                       _alertDialog(
                                           tipodepago, controllerTextComi);
                                     },
-                                    leading: Icon(Icons.bus_alert),
+                                    leading: Icon(
+                                      Icons.bus_alert,
+                                      color:
+                                          HexColor("#ffd60a").withOpacity(0.5),
+                                    ),
                                     title: const Text("Transporte"),
                                     trailing: Text(
                                         gasto.transportAmount.toString(),
@@ -350,7 +365,11 @@ class _HomePageState extends State<HomePage> {
                                       _alertDialog(
                                           tipodepago, controllerTextComi);
                                     },
-                                    leading: Icon(Icons.festival),
+                                    leading: Icon(
+                                      Icons.festival,
+                                      color:
+                                          HexColor("#ffd6a5").withOpacity(0.7),
+                                    ),
                                     title: const Text("Varios"),
                                     trailing: Text(
                                         gasto.variousAmount.toString(),

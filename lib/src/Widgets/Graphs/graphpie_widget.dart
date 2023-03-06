@@ -1,9 +1,11 @@
-
 import 'dart:ffi';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../Core/Colors/Hex_Color.dart';
+
 class PieGraphWidget extends StatefulWidget {
   const PieGraphWidget({super.key, required this.incomeData});
   final List<double> incomeData;
@@ -13,37 +15,38 @@ class PieGraphWidget extends StatefulWidget {
 }
 
 class _PieGraphWidgetState extends State<PieGraphWidget> {
-   int touchedIndex = 0;
+  int touchedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return SizedBox.square(
-      dimension: MediaQuery.of(context).size.width *0.95 ,
+      dimension: MediaQuery.of(context).size.width * 0.95,
       child: PieChart(
-       PieChartData(
-           pieTouchData: PieTouchData(
-             touchCallback: (FlTouchEvent event, pieTouchResponse) {
-               setState(() {
-                 if (!event.isInterestedForInteractions ||
-                     pieTouchResponse == null ||
-                     pieTouchResponse.touchedSection == null) {
-                   touchedIndex = -1;
-                   return;
-                 }
-                 touchedIndex =
-                     pieTouchResponse.touchedSection!.touchedSectionIndex;
-               });
-             },
-           ),
-           borderData: FlBorderData(
-             show: false,
-           ),
-           sectionsSpace: 0,
-           centerSpaceRadius: 0,
-           sections: showingSections(),
-         ),
+        PieChartData(
+          pieTouchData: PieTouchData(
+            touchCallback: (FlTouchEvent event, pieTouchResponse) {
+              setState(() {
+                if (!event.isInterestedForInteractions ||
+                    pieTouchResponse == null ||
+                    pieTouchResponse.touchedSection == null) {
+                  touchedIndex = -1;
+                  return;
+                }
+                touchedIndex =
+                    pieTouchResponse.touchedSection!.touchedSectionIndex;
+              });
+            },
+          ),
+          borderData: FlBorderData(
+            show: false,
+          ),
+          sectionsSpace: 0,
+          centerSpaceRadius: 0,
+          sections: showingSections(),
+        ),
       ),
     );
   }
+
   List<PieChartSectionData> showingSections() {
     return List.generate(5, (i) {
       final isTouched = i == touchedIndex;
@@ -52,10 +55,9 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
 
       switch (i) {
-        
         case 0:
           return PieChartSectionData(
-            color: Theme.of(context).primaryColorDark,
+            color: HexColor("#bdb2ff").withOpacity(0.6),
             value: widget.incomeData[0],
             title: 'Limpieza:  ${widget.incomeData[1]} \$',
             showTitle: isTouched,
@@ -66,74 +68,67 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
               color: const Color(0xffffffff),
               shadows: shadows,
             ),
-           
             badgePositionPercentageOffset: .98,
           );
         case 1:
           return PieChartSectionData(
-            color:Theme.of(context).primaryColorLight,
+            color: HexColor("#ffc6ff"),
             value: widget.incomeData[1],
             title: 'Comida:  ${widget.incomeData[2]} \$',
             radius: radius,
-             showTitle: isTouched,
+            showTitle: isTouched,
             titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
               color: const Color(0xffffffff),
               shadows: shadows,
             ),
-          
             badgePositionPercentageOffset: .98,
           );
         case 2:
           return PieChartSectionData(
-            color:Theme.of(context).secondaryHeaderColor,
+            color: HexColor("#64dfdf").withOpacity(0.6),
             value: widget.incomeData[2],
             title: 'Estudio:  ${widget.incomeData[3]} \$',
             radius: radius,
-             showTitle: isTouched,
+            showTitle: isTouched,
             titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
               color: const Color(0xffffffff),
               shadows: shadows,
             ),
-           
             badgePositionPercentageOffset: .98,
           );
         case 3:
-        return PieChartSectionData(
-            color:Theme.of(context).primaryColor,
+          return PieChartSectionData(
+            color: HexColor("#fdffb6").withOpacity(0.7),
             value: widget.incomeData[3],
             title: 'Transporte:  ${widget.incomeData[4]} \$',
             radius: radius,
-             showTitle: isTouched,
+            showTitle: isTouched,
             titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
               color: const Color(0xffffffff),
               shadows: shadows,
             ),
-           
             badgePositionPercentageOffset: .6,
-          
           );
-          case 4: 
+        case 4:
           return PieChartSectionData(
-            color:Theme.of(context).unselectedWidgetColor,
+            color: HexColor("#ffd6a5").withOpacity(0.7),
             value: widget.incomeData[4],
             title: 'Varios  ${widget.incomeData[4]} \$',
             radius: radius,
-             showTitle: isTouched,
+            showTitle: isTouched,
             titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
               color: const Color(0xffffffff),
               shadows: shadows,
             ),
-           
             badgePositionPercentageOffset: .98,
-          
           );
         default:
           throw Exception('Oh no');

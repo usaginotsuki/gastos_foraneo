@@ -2,6 +2,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:supercharged/supercharged.dart';
 
+import '../../../Core/Colors/Hex_Color.dart';
+
 class LineChartWidget extends StatelessWidget {
   const LineChartWidget({required this.incomeList});
 
@@ -155,7 +157,7 @@ class LineChartWidget extends StatelessWidget {
 
   LineChartBarData get lineChartBarData1_1 => LineChartBarData(
         isCurved: true,
-        color: Color.fromARGB(232, 182, 104, 1),
+        color: HexColor("#bdb2ff"),
         barWidth: 4,
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),

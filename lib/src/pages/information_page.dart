@@ -73,7 +73,7 @@ class _InformationPageState extends State<InformationPage> {
 
                       return Padding(
                         padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.10),
+                            top: MediaQuery.of(context).size.height * 0.15),
                         child: Stack(
                           children: [
                             (listgst.isNotEmpty && listgst.length >= 12)
@@ -98,35 +98,38 @@ class _InformationPageState extends State<InformationPage> {
                               padding: EdgeInsets.only(
                                   top: MediaQuery.of(context).size.height *
                                       0.25),
-                              child: Center(
-                                child: SizedBox.square(
-                                  dimension: MediaQuery.of(context).size.width,
-                                  child: PageView.builder(
-                                      clipBehavior: Clip.none,
-                                      onPageChanged: (index) {},
-                                      itemCount: 12,
-                                      physics: const ClampingScrollPhysics(),
-                                      itemBuilder: (context, int index) {
-                                        return PieGraphWidget(
-                                          incomeData: [
-                                            listgst[index]
-                                                .cleaningAmount
-                                                .toDouble(),
-                                            listgst[index]
-                                                .foodAmount
-                                                .toDouble(),
-                                            listgst[index]
-                                                .studyAmount
-                                                .toDouble(),
-                                            listgst[index]
-                                                .transportAmount
-                                                .toDouble(),
-                                            listgst[index]
-                                                .variousAmount
-                                                .toDouble(),
-                                          ],
-                                        );
-                                      }),
+                              child: Container(
+                                child: Center(
+                                  child: SizedBox.square(
+                                    dimension:
+                                        MediaQuery.of(context).size.width,
+                                    child: PageView.builder(
+                                        clipBehavior: Clip.none,
+                                        onPageChanged: (index) {},
+                                        itemCount: 12,
+                                        physics: const ClampingScrollPhysics(),
+                                        itemBuilder: (context, int index) {
+                                          return PieGraphWidget(
+                                            incomeData: [
+                                              listgst[index]
+                                                  .cleaningAmount
+                                                  .toDouble(),
+                                              listgst[index]
+                                                  .foodAmount
+                                                  .toDouble(),
+                                              listgst[index]
+                                                  .studyAmount
+                                                  .toDouble(),
+                                              listgst[index]
+                                                  .transportAmount
+                                                  .toDouble(),
+                                              listgst[index]
+                                                  .variousAmount
+                                                  .toDouble(),
+                                            ],
+                                          );
+                                        }),
+                                  ),
                                 ),
                               ),
                             ),
